@@ -1,5 +1,5 @@
 const express = require("express");
-var cors = require("cors");
+const cors = require("cors");
 
 const app = express();
 
@@ -15,6 +15,6 @@ app.get(`${basePath}/ping`, (req, res) => {
   res.send("pong");
 });
 
-console.log(`API is running in http://localhost:${port}/api`)
+console.log(`API is running in http://localhost:${port}/api`);
 
 app.listen(port);
