@@ -1,0 +1,62 @@
+version: "3.7"
+
+services:
+  mongo:
+    image: mongo:3.6.17-xenial
+    container_name: db
+    ports:
+      - "27017:27017"
+    env_file:
+      - .env/dev/db.env
+    volumes:
+      - /manual_da_obra/data/configdb:/data/configdb
+      - /manual_da_obra/data/db:/data/db
+    restart: always
+
+  mongo-express:
+    image: mongo-express:0.54.0
+    container_name: db_admin
+    ports:
+      - 8081:8081
+    env_file:
+      - .env/dev/db-admin.env
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    restart: always
+
+  backend:
+    build:
+      context: ./backend
+    image: manual_backend
+    container_name: api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env/dev/app.env
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - mongo
+    restart: always
+    command: yarn dev
+
+  frontend:
+    build:
+      context: ./frontend
+      target: build-deps
+    image: manual_frontend
+    container_name: ui
+    ports:
+      - "3000:3000"
+      - "35729:35729"
+    env_file:
+      - .env/dev/ui.env
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: always
+    stdin_open: true
+    command: yarn start
