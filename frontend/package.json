@@ -9,7 +9,7 @@
     "web-vitals": "^0.2.4",
     "react-router-dom": "^5.2.0",
     "history": "^5.0.0",
-    "antd": "^4.9.1"
+    "antd": "^4.8.5"
   },
   "devDependencies": {
     "eslint": "^7.14.0",
