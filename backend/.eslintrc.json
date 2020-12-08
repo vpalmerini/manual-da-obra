@@ -20,6 +20,7 @@
             "error",
             "double"
         ],
+        "consistent-return": "off",
         "prettier/prettier": "warn"
     }
 }
