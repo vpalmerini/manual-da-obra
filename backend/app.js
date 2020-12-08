@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const connectDB = require("./src/db");
 
 const app = express();
 
@@ -10,6 +11,8 @@ const basePath = "/api";
 app.use(cors({ credentials: true, origin: UI_URL }));
 
 app.use(express.json());
+
+connectDB();
 
 app.get(`${basePath}/ping`, (req, res) => {
   res.send("pong");
