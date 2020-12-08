@@ -14,6 +14,8 @@ app.use(express.json());
 
 connectDB();
 
+app.use(basePath, require("./src/controllers"));
+
 app.get(`${basePath}/ping`, (req, res) => {
   res.send("pong");
 });
