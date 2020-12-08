@@ -2,6 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 const UserService = require("../services/user.service");
+const { handleError } = require("../helpers/error");
 
 router.get("/", async (req, res) => {
   try {
@@ -11,7 +12,7 @@ router.get("/", async (req, res) => {
       users,
     });
   } catch (e) {
-    console.log(e);
+    handleError(e, res);
   }
 });
 
@@ -24,7 +25,7 @@ router.post("/", async (req, res) => {
       user,
     });
   } catch (e) {
-    console.log(e);
+    handleError(e, res);
   }
 });
 
@@ -42,7 +43,7 @@ router.get("/:id", async (req, res) => {
       user,
     });
   } catch (e) {
-    console.log(e);
+    handleError(e, res);
   }
 });
 
@@ -58,7 +59,7 @@ router.delete("/:id", async (req, res) => {
       status: 202,
     });
   } catch (e) {
-    console.log(e);
+    handleError(e, res);
   }
 });
 
@@ -76,7 +77,7 @@ router.put("/:id", async (req, res) => {
       user,
     });
   } catch (e) {
-    console.log(e);
+    handleError(e, res);
   }
 });
 

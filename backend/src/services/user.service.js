@@ -1,10 +1,11 @@
 const User = require("../models/user.model");
+const { ErrorHandler } = require("../helpers/error");
 
 const getUsers = async (query) => {
   try {
     return await User.find(query);
   } catch (e) {
-    console.log(e);
+    throw new ErrorHandler(500, "Error while fetching users");
   }
 };
 
@@ -13,9 +14,9 @@ const createUser = async (data) => {
     return await User.create(data);
   } catch (e) {
     if (e.code === 11000) {
-      console.log(e);
+      throw new ErrorHandler(409, e.errmsg);
     }
-    console.log(e);
+    throw new ErrorHandler(500, e.errmsg);
   }
 };
 
@@ -23,7 +24,7 @@ const getUser = async (id) => {
   try {
     return await User.findById(id);
   } catch (e) {
-    console.log(e);
+    throw new ErrorHandler(500, e.errmsg);
   }
 };
 
@@ -31,7 +32,7 @@ const deleteUser = async (id) => {
   try {
     return await User.findByIdAndDelete(id);
   } catch (e) {
-    console.log(e);
+    throw new ErrorHandler(500, e.errmsg);
   }
 };
 
@@ -40,7 +41,7 @@ const updateUser = async (id, data) => {
     await User.updateOne({ _id: id }, { $set: data });
     return await User.findById(id);
   } catch (e) {
-    console.log(e);
+    throw new ErrorHandler(500, e.errmsg);
   }
 };
 
