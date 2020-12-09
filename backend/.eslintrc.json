@@ -22,6 +22,7 @@
         ],
         "consistent-return": "off",
         "max-classes-per-file": "off",
+        "no-underscore-dangle": "off",
         "prettier/prettier": "warn"
     }
 }
