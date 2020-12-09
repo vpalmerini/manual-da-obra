@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import login from "services/auth.service";
 import routes from "routes/routes";
 
+import { toast } from "react-toastify";
 import { Card, Input, Button } from "antd";
 import Crane from "assets/images/crane.svg";
 import styles from "./Login.module.scss";
@@ -23,7 +24,11 @@ const Login = ({ history }) => {
         history.push(routes.DASHBOARD);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response && err.response.status === 401) {
+          toast.error("Credenciais Inválidas");
+        } else {
+          toast.error("Ops! Aconteceu algum erro");
+        }
         setIsSubmitting(false);
       });
   };

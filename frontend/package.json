@@ -10,7 +10,8 @@
     "react-router-dom": "^5.2.0",
     "history": "^4.10.1",
     "antd": "^4.8.5",
-    "axios": "^0.21.0"
+    "axios": "^0.21.0",
+    "react-toastify": "^6.2.0"
   },
   "devDependencies": {
     "eslint-plugin-react": "^7.21.5",
