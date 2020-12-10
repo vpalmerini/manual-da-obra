@@ -3,8 +3,9 @@ const express = require("express");
 const router = express.Router();
 const ConstructionService = require("../services/construction.service");
 const { handleError } = require("../helpers/error");
+const { AuthMiddleware } = require("../middlewares/auth.middleware");
 
-router.get("/", async (req, res) => {
+router.get("/", AuthMiddleware, async (req, res) => {
   try {
     const constructions = await ConstructionService.getConstructions({});
     return res.status(200).json({
@@ -16,7 +17,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", AuthMiddleware, async (req, res) => {
   try {
     const construction = await ConstructionService.createConstruction(req.body);
     return res.status(201).json({
@@ -46,7 +47,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", AuthMiddleware, async (req, res) => {
   try {
     const construction = await ConstructionService.deleteConstruction(
       req.params.id
@@ -64,7 +65,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", AuthMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const construction = await ConstructionService.updateConstruction(

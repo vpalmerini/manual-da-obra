@@ -3,8 +3,9 @@ const express = require("express");
 const router = express.Router();
 const UserService = require("../services/user.service");
 const { handleError } = require("../helpers/error");
+const { AuthMiddleware } = require("../middlewares/auth.middleware");
 
-router.get("/", async (req, res) => {
+router.get("/", AuthMiddleware, async (req, res) => {
   try {
     const users = await UserService.getUsers({});
     return res.status(200).json({
@@ -16,7 +17,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", AuthMiddleware, async (req, res) => {
   try {
     const user = await UserService.createUser(req.body);
     user.password = null;
@@ -29,7 +30,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", AuthMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const user = await UserService.getUser(id);
@@ -47,7 +48,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", AuthMiddleware, async (req, res) => {
   try {
     const user = await UserService.deleteUser(req.params.id);
     if (!user) {
@@ -63,7 +64,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", AuthMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const user = await UserService.updateUser(id, req.body);

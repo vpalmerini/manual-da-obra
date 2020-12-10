@@ -2,7 +2,41 @@ const jwt = require("jsonwebtoken");
 
 const { parseCookie } = require("../helpers/cookie");
 
-const { REFRESH_TOKEN_SECRET } = process.env;
+const { TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
+
+const AuthMiddleware = async (req, res, next) => {
+  const { headers } = req;
+
+  const cookie = headers ? headers.cookie : null;
+
+  if (!cookie) {
+    return res
+      .status(401)
+      .send({ status: 401, message: "Access token is missing" });
+  }
+
+  const parsedCookies = await parseCookie(cookie);
+  const { token } = parsedCookies;
+  if (!token) {
+    return res
+      .status(401)
+      .send({ status: 401, message: "Access token is invalid or missing" });
+  }
+
+  const data = jwt.verify(token, TOKEN_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({ status: 401, message: err.message });
+    }
+    return decoded;
+  });
+
+  req.authContext = {
+    token,
+    data,
+  };
+
+  next();
+};
 
 const VerifyRefreshToken = async (req, res, next) => {
   const { headers } = req;
@@ -36,4 +70,4 @@ const VerifyRefreshToken = async (req, res, next) => {
   next();
 };
 
-module.exports = { VerifyRefreshToken };
+module.exports = { AuthMiddleware, VerifyRefreshToken };
