@@ -1,9 +1,8 @@
 import React, { useState, useContext } from "react";
 
-import login from "services/auth.service";
-
 import { context } from "store/store";
 import types from "store/types";
+import { login } from "services/auth.service";
 
 import { toast } from "react-toastify";
 import { Card, Input, Button } from "antd";
