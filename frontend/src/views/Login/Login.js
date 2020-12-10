@@ -1,18 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import login from "services/auth.service";
-import routes from "routes/routes";
+
+import { context } from "store/store";
+import types from "store/types";
 
 import { toast } from "react-toastify";
 import { Card, Input, Button } from "antd";
 import Crane from "assets/images/crane.svg";
 import styles from "./Login.module.scss";
 
-const Login = ({ history }) => {
+const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const dispatch = useContext(context)[1];
 
   const submitLogin = async (e, data) => {
     e.preventDefault();
@@ -21,7 +24,7 @@ const Login = ({ history }) => {
     const { username, password } = data;
     login(username, password)
       .then(() => {
-        history.push(routes.DASHBOARD);
+        dispatch({ type: types.LOGIN });
       })
       .catch((err) => {
         if (err.response && err.response.status === 401) {
