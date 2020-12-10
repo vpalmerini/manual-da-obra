@@ -1,4 +1,5 @@
 const express = require("express");
+const { check, validationResult } = require('express-validator');
 
 const router = express.Router();
 const UserService = require("../services/user.service");
@@ -17,7 +18,14 @@ router.get("/", AuthMiddleware, async (req, res) => {
   }
 });
 
-router.post("/", AuthMiddleware, async (req, res) => {
+router.post("/", [
+  check('username').not().isEmpty().withMessage('Username is missing'),
+], AuthMiddleware, async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json(errors.array());
+  }
+
   try {
     const user = await UserService.createUser(req.body);
     user.password = null;

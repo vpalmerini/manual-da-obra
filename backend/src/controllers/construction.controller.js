@@ -1,4 +1,5 @@
 const express = require("express");
+const { check, validationResult } = require('express-validator');
 
 const router = express.Router();
 const ConstructionService = require("../services/construction.service");
@@ -17,7 +18,15 @@ router.get("/", AuthMiddleware, async (req, res) => {
   }
 });
 
-router.post("/", AuthMiddleware, async (req, res) => {
+router.post("/", [
+  check('name').not().isEmpty().withMessage('Name is missing'),
+  check('location').not().isEmpty().withMessage('Location is missing')
+], AuthMiddleware, async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json(errors.array());
+  }
+
   try {
     const construction = await ConstructionService.createConstruction(req.body);
     return res.status(201).json({
