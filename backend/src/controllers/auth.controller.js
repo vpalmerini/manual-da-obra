@@ -5,9 +5,10 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 const { getUserWithPassword } = require("../services/auth.service");
+const UserService = require("../services/user.service");
 const { handleError, ErrorHandler } = require("../helpers/error");
 const jwtConfig = require("../jwt");
-const { VerifyRefreshToken } = require("../middlewares/auth.middleware");
+const { AuthMiddleware, VerifyRefreshToken } = require("../middlewares/auth.middleware");
 
 router.post("/", async (req, res) => {
   try {
@@ -78,6 +79,28 @@ router.post("/refresh", VerifyRefreshToken, async (req, res) => {
       .json({
         status: 200,
       });
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+router.get("/me", AuthMiddleware, async (req, res) => {
+  try {
+    const { id } = req.authContext.data;
+    const user = await UserService.getUser(id);
+    if (!user) {
+      throw new ErrorHandler(404, "User not found");
+    }
+
+    const { _id, username, email } = user;
+    return res.status(200).json({
+      status: 200,
+      user: {
+        _id,
+        username,
+        email,
+      },
+    });
   } catch (e) {
     handleError(e, res);
   }

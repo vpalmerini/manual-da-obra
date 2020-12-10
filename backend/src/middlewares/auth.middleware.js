@@ -23,19 +23,16 @@ const AuthMiddleware = async (req, res, next) => {
       .send({ status: 401, message: "Access token is invalid or missing" });
   }
 
-  const data = jwt.verify(token, TOKEN_SECRET, (err, decoded) => {
+  jwt.verify(token, TOKEN_SECRET, (err, decoded) => {
     if (err) {
       return res.status(401).send({ status: 401, message: err.message });
     }
-    return decoded;
+    req.authContext = {
+      token,
+      data: decoded,
+    };
+    next();
   });
-
-  req.authContext = {
-    token,
-    data,
-  };
-
-  next();
 };
 
 const VerifyRefreshToken = async (req, res, next) => {
@@ -61,13 +58,11 @@ const VerifyRefreshToken = async (req, res, next) => {
     if (err) {
       return res.status(401).send({ status: 401, message: err.message });
     }
+    req.authContext = {
+      refreshToken,
+    };
+    next();
   });
-
-  req.authContext = {
-    refreshToken,
-  };
-
-  next();
 };
 
 module.exports = { AuthMiddleware, VerifyRefreshToken };
