@@ -2,8 +2,10 @@ import React, { useEffect, useContext } from "react";
 
 import { Router, Switch, Route } from "react-router-dom";
 import history from "routes/history";
+
 import Dashboard from "views/Dashboard/Dashboard";
 import Login from "views/Login/Login";
+import NewConstruction from "views/Construction/NewConstruction/NewConstruction";
 
 import { context } from "store/store";
 import types from "store/types";
@@ -36,6 +38,7 @@ const App = () => {
       <ToastContainer />
       <Router history={history}>
         <Switch>
+          <PrivateRoute path={routes.NEW_CONSTRUCTION} component={NewConstruction} />
           <Route path={routes.LOGIN} component={Login} />
           <PrivateRoute path={routes.HOME} component={Dashboard} />
         </Switch>

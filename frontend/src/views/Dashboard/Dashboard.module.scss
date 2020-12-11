@@ -7,6 +7,10 @@
         text-align: center;
     }
 
+    button {
+        margin: var(--spacing-base) 0;
+    }
+
     .cards {
         display: flex;
         flex-wrap: wrap;

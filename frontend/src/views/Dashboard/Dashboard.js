@@ -6,11 +6,13 @@ import Page from "components/Page/Page";
 import Container from "components/Container/Container";
 import Card from "components/Card/Card";
 import { toast } from "react-toastify";
-import { Spin } from "antd";
+import { Spin, Button } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 
+import routes from "routes/routes";
 import styles from "./Dashboard.module.scss";
 
-const Dashboard = () => {
+const Dashboard = ({ history }) => {
   const [constructions, setConstructions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -45,6 +47,7 @@ const Dashboard = () => {
             <div className={styles.title}>
               <h1>Obras</h1>
             </div>
+            <Button type="primary" icon={<PlusOutlined />} onClick={() => history.push(routes.NEW_CONSTRUCTION)}>Adicionar</Button>
             <div className={styles.cards}>
               {constructions && constructions.map((constr) => (
                 <div className={styles.card}>
