@@ -12,9 +12,13 @@
 }
 
 body {
-  background-color: var(--bg-color);
   margin: 0;
   font-family: "Montserrat", "Roboto", Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
 }
