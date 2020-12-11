@@ -6,6 +6,7 @@ import history from "routes/history";
 import Dashboard from "views/Dashboard/Dashboard";
 import Login from "views/Login/Login";
 import NewConstruction from "views/Construction/NewConstruction/NewConstruction";
+import EditConstruction from "views/Construction/EditConstruction/EditConstruction";
 
 import { context } from "store/store";
 import types from "store/types";
@@ -38,6 +39,7 @@ const App = () => {
       <ToastContainer />
       <Router history={history}>
         <Switch>
+          <PrivateRoute path={routes.EDIT_CONSTRUCTION} component={EditConstruction} />
           <PrivateRoute path={routes.NEW_CONSTRUCTION} component={NewConstruction} />
           <Route path={routes.LOGIN} component={Login} />
           <PrivateRoute path={routes.HOME} component={Dashboard} />

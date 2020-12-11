@@ -3,16 +3,18 @@ import React from "react";
 import { Card } from "antd";
 import { EditOutlined, InfoCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 
-const CardConstruction = ({ title, description, actions }) => {
+const CardConstruction = ({
+  id, title, description, actions,
+}) => {
   const { Meta } = Card;
 
   return (
     <Card
       style={{ width: 300, textAlign: "center" }}
       actions={[
-        <InfoCircleOutlined onClick={actions && actions.info} />,
-        <EditOutlined key="edit" onClick={actions && actions.edit} />,
-        <DeleteOutlined onClick={actions && actions.delete} />,
+        <InfoCircleOutlined onClick={() => actions.info} />,
+        <EditOutlined key="edit" onClick={() => actions.edit(id)} />,
+        <DeleteOutlined onClick={() => actions.delete} />,
       ]}
     >
       <Meta

@@ -35,7 +35,7 @@ const Dashboard = ({ history }) => {
 
   const actions = {
     info: () => alert("info"),
-    edit: () => alert("edit"),
+    edit: (id) => history.push(routes.EDIT_CONSTRUCTION.replace(":id", id)),
     delete: () => alert("delete"),
   };
 
@@ -50,8 +50,13 @@ const Dashboard = ({ history }) => {
             <Button type="primary" icon={<PlusOutlined />} onClick={() => history.push(routes.NEW_CONSTRUCTION)}>Adicionar</Button>
             <div className={styles.cards}>
               {constructions && constructions.map((constr) => (
-                <div className={styles.card}>
-                  <Card title={constr.name} description={constr.location} actions={actions} />
+                <div key={constr._id} className={styles.card}>
+                  <Card
+                    id={constr._id}
+                    title={constr.name}
+                    description={constr.location}
+                    actions={actions}
+                  />
                 </div>
               ))}
             </div>
