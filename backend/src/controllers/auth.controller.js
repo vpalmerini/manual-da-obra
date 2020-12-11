@@ -6,7 +6,10 @@ const bcrypt = require("bcryptjs");
 
 const { getUserWithPassword } = require("../services/auth.service");
 const UserService = require("../services/user.service");
+
 const { handleError, ErrorHandler } = require("../helpers/error");
+const { clearCookies } = require("../helpers/cookie");
+
 const jwtConfig = require("../jwt");
 const { AuthMiddleware, VerifyRefreshToken } = require("../middlewares/auth.middleware");
 
@@ -101,6 +104,15 @@ router.get("/me", AuthMiddleware, async (req, res) => {
         email,
       },
     });
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
+router.post("/logout", async (req, res) => {
+  try {
+    await clearCookies(res);
+    res.status(202).json({ status: 202 });
   } catch (e) {
     handleError(e, res);
   }
