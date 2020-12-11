@@ -1,0 +1,20 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600&display=swap");
+
+:root {
+    /* 'margin', 'padding', 'top', 'right', ... */
+  --spacing-tiny: 4px;
+  --spacing-small: 8px;
+  --spacing-base: 16px;
+  --spacing-medium: 24px;
+  --spacing-large: 32px;
+  --spacing-huge: 48px;
+  --spacing-very-huge: 96px;
+}
+
+body {
+  background-color: var(--bg-color);
+  margin: 0;
+  font-family: "Montserrat", "Roboto", Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
