@@ -1,20 +1,34 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 import { context } from "store/store";
 import types from "store/types";
 import { login } from "services/auth.service";
+import routes from "routes/routes";
 
 import { toast } from "react-toastify";
 import { Card, Input, Button } from "antd";
 import Crane from "assets/images/crane.svg";
 import styles from "./Login.module.scss";
 
-const Login = () => {
+const Login = ({ history, location }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const dispatch = useContext(context)[1];
+  const [, dispatch] = useContext(context);
+
+  useEffect(() => {
+    if (location && location.state) {
+      if (location.state.logout) {
+        dispatch({ type: types.LOGOUT });
+
+        if (location.state.error) {
+          toast.info("Sua sessão expirou. Faça login novamente");
+        }
+      }
+    }
+    // eslint-disable-next-line
+  }, [location]);
 
   const submitLogin = async (e, data) => {
     e.preventDefault();
@@ -24,6 +38,7 @@ const Login = () => {
     login(username, password)
       .then(() => {
         dispatch({ type: types.LOGIN });
+        history.push(routes.HOME);
       })
       .catch((err) => {
         if (err.response && err.response.status === 401) {

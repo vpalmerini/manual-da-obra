@@ -11,8 +11,8 @@ exports.parseCookie = async (cookie) => {
   return parsedCookies;
 };
 
-exports.clearCookies = (res) => {
-  res.clearCookie("token");
-  res.clearCookie("refresh_token");
+exports.clearCookies = async (res) => {
+  await res.clearCookie("token");
+  await res.clearCookie("refresh_token");
   return res;
 };

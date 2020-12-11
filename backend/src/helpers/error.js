@@ -13,7 +13,7 @@ const handleError = async (err, res) => {
   if (status === 401) {
     await clearCookies(res);
   }
-  return res.status(status || 500).json({
+  res.status(status || 500).json({
     status,
     message,
   });
