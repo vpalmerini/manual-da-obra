@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const ConstructionSchema = new mongoose.Schema({
+const ConstructionSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -13,8 +14,10 @@ const ConstructionSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  systems: [{
+    type: Schema.Types.ObjectId,
+    ref: "System"
+  }]
 });
 
-const Construction = mongoose.model("Construction", ConstructionSchema);
-
-module.exports = Construction;
+module.exports = mongoose.model("Construction", ConstructionSchema);
