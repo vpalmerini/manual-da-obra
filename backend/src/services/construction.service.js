@@ -19,7 +19,7 @@ const createConstruction = async (data) => {
 
 const getConstruction = async (id) => {
   try {
-    return await Construction.findById(id);
+    return await Construction.findById(id).populate("systems");
   } catch (e) {
     throw new ErrorHandler(500, e._message);
   }
@@ -41,10 +41,19 @@ const updateConstruction = async (id, data) => {
   }
 };
 
+const addSystem = async (id, systemId) => {
+  try {
+    return await Construction.findOneAndUpdate({ _id: id }, {$push: {systems: systemId}}, { new: true, useFindAndModify: false });
+  } catch (e) {
+    throw new ErrorHandler(500, e._message);
+  }
+}
+
 module.exports = {
   getConstructions,
   createConstruction,
   getConstruction,
   deleteConstruction,
   updateConstruction,
+  addSystem,
 };

@@ -20,26 +20,26 @@ const getSystems = async (query) => {
     }
   };
   
-  const getSystem = async (name) => {
+  const getSystem = async (id, nickname) => {
     try {
-      return await System.findOne({ name });
+      return await System.findOne({ construction: id, nickname });
     } catch (e) {
       throw new ErrorHandler(500, e._message);
     }
   };
   
-  const deleteSystem = async (id) => {
+  const deleteSystem = async (params) => {
     try {
-      return await System.findByIdAndDelete(id);
+      return await System.findOneAndDelete(params);
     } catch (e) {
       throw new ErrorHandler(500, e._message);
     }
   };
   
-  const updateSystem = async (name, data) => {
+  const updateSystem = async (id, nickname, data) => {
     try {
-      await System.updateOne({ name }, { $set: data });
-      return await System.findById(id);
+      await System.findOneAndUpdate({ construction: id, nickname }, { $set: data }, { useFindAndModify: false });
+      return await System.findOne({ construction: id, nickname });
     } catch (e) {
       throw new ErrorHandler(500, e._message);
     }
