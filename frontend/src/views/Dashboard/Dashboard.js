@@ -67,7 +67,7 @@ const Dashboard = ({ history }) => {
   };
 
   const actions = {
-    info: () => alert("info"),
+    info: (id) => history.push(routes.DETAIL_CONSTRUCTION.replace(":id", id)),
     edit: (id) => history.push(routes.EDIT_CONSTRUCTION.replace(":id", id)),
     delete: (id) => showDeleteConfirm(id),
   };

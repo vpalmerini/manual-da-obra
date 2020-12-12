@@ -14,7 +14,7 @@ const CardConstruction = ({
     <Card
       style={{ width: 300, textAlign: "center" }}
       actions={[
-        <InfoCircleOutlined onClick={() => actions.info} />,
+        <InfoCircleOutlined onClick={() => actions.info(id)} />,
         <EditOutlined key="edit" onClick={() => actions.edit(id)} />,
         <DeleteOutlined onClick={() => actions.delete(id)} />,
       ]}
