@@ -7,3 +7,5 @@ export const create = async (data) => api.post("/constructions", data);
 export const detail = async (id) => api.get(`/constructions/${id}`);
 
 export const edit = async (id, data) => api.put(`/constructions/${id}`, data);
+
+export const remove = async (id) => api.delete(`/constructions/${id}`);

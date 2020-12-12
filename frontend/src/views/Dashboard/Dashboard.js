@@ -1,42 +1,75 @@
 import React, { useState, useEffect } from "react";
 
-import { list } from "services/construction.service";
+import { list, remove } from "services/construction.service";
 
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
 import Card from "components/Card/Card";
 import { toast } from "react-toastify";
-import { Spin, Button } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Spin, Button, Modal } from "antd";
+import { PlusOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 
 import routes from "routes/routes";
 import styles from "./Dashboard.module.scss";
 
+const { confirm } = Modal;
+
 const Dashboard = ({ history }) => {
   const [constructions, setConstructions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [, setIsDeleting] = useState(false);
+
+  const getConstructions = () => {
+    setIsLoading(true);
+    list()
+      .then((response) => {
+        setConstructions(response.data.constructions);
+      })
+      .catch(() => {
+        toast.error("Ops! Aconteceu algum erro pra carregar as obras");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
   useEffect(() => {
-    const getConstructions = () => {
-      setIsLoading(true);
-      list()
-        .then((response) => {
-          setConstructions(response.data.constructions);
-        })
-        .catch(() => {
-          toast.error("Ops! Aconteceu algum erro pra carregar as obras");
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    };
     getConstructions();
   }, []);
+
+  const deleteConstruction = (id) => {
+    setIsDeleting(true);
+    remove(id)
+      .then(() => {
+        toast.success("Obra removida!");
+        getConstructions();
+      })
+      .catch(() => {
+        toast.error("Ops! Aconteceu algum erro pra remover a obra");
+      })
+      .finally(() => {
+        setIsDeleting(false);
+      });
+  };
+
+  const showDeleteConfirm = (id) => {
+    confirm({
+      title: "Tem certeza que deseja remover a obra?",
+      icon: <ExclamationCircleOutlined />,
+      okText: "Remover",
+      okType: "danger",
+      cancelText: "Cancelar",
+      onOk() {
+        return deleteConstruction(id);
+      },
+      onCancel() {},
+    });
+  };
 
   const actions = {
     info: () => alert("info"),
     edit: (id) => history.push(routes.EDIT_CONSTRUCTION.replace(":id", id)),
-    delete: () => alert("delete"),
+    delete: (id) => showDeleteConfirm(id),
   };
 
   return (
