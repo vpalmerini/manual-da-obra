@@ -11,7 +11,7 @@ import DetailConstruction from "views/Construction/DetailConstruction/DetailCons
 
 import { context } from "store/store";
 import types from "store/types";
-import { me } from "services/auth.service";
+import { me, logout } from "services/auth.service";
 
 import { ToastContainer } from "react-toastify";
 import routes from "routes/routes";
@@ -29,7 +29,7 @@ const App = () => {
           history.push(routes.HOME);
         })
         .catch(() => {
-          dispatch({ type: types.LOGOUT });
+          logout(true);
         });
     };
     getMe();
@@ -40,10 +40,10 @@ const App = () => {
       <ToastContainer />
       <Router history={history}>
         <Switch>
+          <Route path={routes.LOGIN} component={Login} />
           <PrivateRoute path={routes.EDIT_CONSTRUCTION} component={EditConstruction} />
           <PrivateRoute path={routes.DETAIL_CONSTRUCTION} component={DetailConstruction} />
           <PrivateRoute path={routes.NEW_CONSTRUCTION} component={NewConstruction} />
-          <Route path={routes.LOGIN} component={Login} />
           <PrivateRoute path={routes.HOME} component={Dashboard} />
         </Switch>
       </Router>

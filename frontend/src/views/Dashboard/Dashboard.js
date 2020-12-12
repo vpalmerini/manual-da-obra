@@ -17,7 +17,6 @@ const { confirm } = Modal;
 const Dashboard = ({ history }) => {
   const [constructions, setConstructions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [, setIsDeleting] = useState(false);
 
   const getConstructions = () => {
     setIsLoading(true);
@@ -38,7 +37,6 @@ const Dashboard = ({ history }) => {
   }, []);
 
   const deleteConstruction = (id) => {
-    setIsDeleting(true);
     remove(id)
       .then(() => {
         toast.success("Obra removida!");
@@ -46,9 +44,6 @@ const Dashboard = ({ history }) => {
       })
       .catch(() => {
         toast.error("Ops! Aconteceu algum erro pra remover a obra");
-      })
-      .finally(() => {
-        setIsDeleting(false);
       });
   };
 

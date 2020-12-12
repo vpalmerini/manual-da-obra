@@ -27,7 +27,6 @@ const Login = ({ history, location }) => {
         }
       }
     }
-    // eslint-disable-next-line
   }, [location]);
 
   const submitLogin = async (e, data) => {

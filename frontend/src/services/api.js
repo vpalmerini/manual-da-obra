@@ -30,7 +30,7 @@ api.interceptors.response.use(
             });
         });
       }
-      return logout(true);
+      logout(true);
     }
     return new Promise((resolve, reject) => {
       reject(error);
