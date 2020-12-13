@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
 
 import { detail } from "services/construction.service";
+import { remove } from "services/system.service";
 import routes from "routes/routes";
 
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
-import Card from "components/Card/Card";
-import { Spin, Button } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import CardSystem from "components/Card/CardSystem";
+import { Spin, Button, Modal } from "antd";
+import { PlusOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 
 import styles from "./DetailConstruction.module.scss";
+
+const { confirm } = Modal;
 
 const DetailConstruction = ({ history, match }) => {
   const [name, setName] = useState("");
@@ -18,30 +21,56 @@ const DetailConstruction = ({ history, match }) => {
   const [systems, setSystems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const getConstruction = (id) => {
+    setIsLoading(true);
+    detail(id)
+      .then((response) => {
+        const { name, location, systems } = response.data.construction;
+        setName(name);
+        setLocation(location);
+        setSystems(systems);
+      })
+      .catch(() => {
+        toast.error("Ops! Aconteceu algum erro pra pegar os dados da obra");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
   useEffect(() => {
-    const getConstruction = (id) => {
-      setIsLoading(true);
-      detail(id)
-        .then((response) => {
-          const { name, location, systems } = response.data.construction;
-          setName(name);
-          setLocation(location);
-          setSystems(systems);
-        })
-        .catch(() => {
-          toast.error("Ops! Aconteceu algum erro pra pegar os dados da obra");
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    };
     getConstruction(match.params.id);
   }, []);
+
+  const deleteSystem = (id, nickname) => {
+    remove(id, nickname)
+      .then(() => {
+        toast.success("Sistema removido!");
+        getConstruction(id);
+      })
+      .catch(() => {
+        toast.error("Ops! Aconteceu algum erro pra remover o sistema");
+      });
+  };
+
+  const showDeleteConfirm = (id, nickname) => {
+    confirm({
+      title: "Tem certeza que deseja remover o sistema?",
+      icon: <ExclamationCircleOutlined />,
+      okText: "Remover",
+      okType: "danger",
+      cancelText: "Cancelar",
+      onOk() {
+        return deleteSystem(id, nickname);
+      },
+      onCancel() {},
+    });
+  };
 
   const actions = {
     info: () => alert("info"),
     edit: (id, nickname) => history.push(routes.EDIT_SYSTEM.replace(":id", id).replace(":nickname", nickname)),
-    delete: () => alert("delete"),
+    delete: (id, nickname) => showDeleteConfirm(id, nickname),
   };
 
   return (
@@ -60,9 +89,8 @@ const DetailConstruction = ({ history, match }) => {
               {systems && systems.length > 0 ? (
                 systems.map((sys) => (
                   <div className={styles.card}>
-                    <Card
-                      id={sys._id}
-                      title={sys.name}
+                    <CardSystem
+                      name={sys.name}
                       nickname={sys.nickname}
                       description={sys.description}
                       construction={sys.construction}

@@ -45,11 +45,11 @@ const App = () => {
       <Router history={history}>
         <Switch>
           <Route path={routes.LOGIN} component={Login} />
+          <PrivateRoute path={routes.NEW_CONSTRUCTION} component={NewConstruction} />
           <PrivateRoute path={routes.EDIT_SYSTEM} component={EditSystem} />
           <PrivateRoute path={routes.NEW_SYSTEM} component={NewSystem} />
           <PrivateRoute path={routes.EDIT_CONSTRUCTION} component={EditConstruction} />
           <PrivateRoute path={routes.DETAIL_CONSTRUCTION} component={DetailConstruction} />
-          <PrivateRoute path={routes.NEW_CONSTRUCTION} component={NewConstruction} />
           <PrivateRoute path={routes.HOME} component={Dashboard} />
         </Switch>
       </Router>
