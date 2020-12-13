@@ -21,7 +21,7 @@ const CardSystem = ({
           <EditOutlined key="edit" onClick={() => actions.edit(construction, nickname)} />
         </Tooltip>,
         <Tooltip placement="bottom" title="Upar Arquivos">
-          <UploadOutlined onClick={() => actions.upload()} />
+          <UploadOutlined onClick={() => actions.upload(construction, nickname)} />
         </Tooltip>,
         <Tooltip placement="right" title="Remover">
           <DeleteOutlined onClick={() => actions.delete(construction, nickname)} />

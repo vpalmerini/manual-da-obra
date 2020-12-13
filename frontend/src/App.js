@@ -13,6 +13,7 @@ import DetailConstruction from "views/Construction/DetailConstruction/DetailCons
 import NewSystem from "views/System/NewSystem/NewSystem";
 import EditSystem from "views/System/EditSystem/EditSystem";
 import DetailSystem from "views/System/DetailSystem/DetailSystem";
+import UploadSystem from "views/System/UploadSystem/UploadSystem";
 
 import { context } from "store/store";
 import types from "store/types";
@@ -48,6 +49,7 @@ const App = () => {
           <Route path={routes.LOGIN} component={Login} />
           <PrivateRoute path={routes.NEW_CONSTRUCTION} component={NewConstruction} />
           <PrivateRoute path={routes.EDIT_SYSTEM} component={EditSystem} />
+          <PrivateRoute path={routes.UPLOAD_SYSTEM} component={UploadSystem} />
           <PrivateRoute path={routes.NEW_SYSTEM} component={NewSystem} />
           <PrivateRoute path={routes.EDIT_CONSTRUCTION} component={EditConstruction} />
           <PrivateRoute path={routes.DETAIL_SYSTEM} component={DetailSystem} />
