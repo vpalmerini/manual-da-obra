@@ -8,6 +8,7 @@ const routes = {
 
   NEW_SYSTEM: "/:id/new",
   EDIT_SYSTEM: "/:id/:nickname/edit",
+  DETAIL_SYSTEM: "/:id/:nickname",
 };
 
 export default routes;

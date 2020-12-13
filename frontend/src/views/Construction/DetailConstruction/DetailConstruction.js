@@ -38,8 +38,10 @@ const DetailConstruction = ({ history, match }) => {
       });
   };
 
+  const { id } = match.params;
+
   useEffect(() => {
-    getConstruction(match.params.id);
+    getConstruction(id);
   }, []);
 
   const deleteSystem = (id, nickname) => {
@@ -68,7 +70,7 @@ const DetailConstruction = ({ history, match }) => {
   };
 
   const actions = {
-    info: () => alert("info"),
+    info: (id, nickname) => history.push(routes.DETAIL_SYSTEM.replace(":id", id).replace(":nickname", nickname)),
     edit: (id, nickname) => history.push(routes.EDIT_SYSTEM.replace(":id", id).replace(":nickname", nickname)),
     delete: (id, nickname) => showDeleteConfirm(id, nickname),
   };
@@ -84,7 +86,7 @@ const DetailConstruction = ({ history, match }) => {
             <div className={styles.description}>
               <h3>{location}</h3>
             </div>
-            <Button type="primary" icon={<PlusOutlined />} onClick={() => history.push(routes.NEW_SYSTEM.replace(":id", match.params.id))}>Adicionar Sistema</Button>
+            <Button type="primary" icon={<PlusOutlined />} onClick={() => history.push(routes.NEW_SYSTEM.replace(":id", id))}>Adicionar Sistema</Button>
             <div className={styles.systems}>
               {systems && systems.length > 0 ? (
                 systems.map((sys) => (

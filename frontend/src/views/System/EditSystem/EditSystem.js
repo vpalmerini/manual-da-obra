@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { get, edit } from "services/system.service";
+import { detail, edit } from "services/system.service";
 import routes from "routes/routes";
 
 import Page from "components/Page/Page";
@@ -22,7 +22,7 @@ const EditSystem = ({ history, match }) => {
 
   const getSystem = () => {
     setIsLoading(true);
-    get(id, nickname)
+    detail(id, nickname)
       .then((response) => {
         const { name, description } = response.data.system;
         setName(name);
