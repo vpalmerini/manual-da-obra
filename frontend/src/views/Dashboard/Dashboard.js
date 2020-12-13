@@ -57,7 +57,7 @@ const Dashboard = ({ history }) => {
       onOk() {
         return deleteConstruction(id);
       },
-      onCancel() {},
+      onCancel() { },
     });
   };
 
@@ -77,7 +77,7 @@ const Dashboard = ({ history }) => {
             </div>
             <Button type="primary" icon={<PlusOutlined />} onClick={() => history.push(routes.NEW_CONSTRUCTION)}>Adicionar</Button>
             <div className={styles.cards}>
-              {constructions && constructions.map((constr) => (
+              {constructions && constructions.length > 0 ? constructions.map((constr) => (
                 <div key={constr._id} className={styles.card}>
                   <CardConstruction
                     id={constr._id}
@@ -86,7 +86,7 @@ const Dashboard = ({ history }) => {
                     actions={actions}
                   />
                 </div>
-              ))}
+              )) : <h4>Nenhuma obra cadastrada</h4>}
             </div>
           </div>
         )}

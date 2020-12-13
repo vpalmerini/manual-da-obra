@@ -16,6 +16,11 @@
         flex-wrap: wrap;
         justify-content: center;
         max-width: 800px;
+        margin-top: var(--spacing-large);
+        
+        h4 {
+            color: rgb(83, 83, 83);
+        }
 
         .card {
             margin: 20px;
