@@ -40,7 +40,7 @@ const DetailConstruction = ({ history, match }) => {
 
   const actions = {
     info: () => alert("info"),
-    edit: () => alert("edit"),
+    edit: (id, nickname) => history.push(routes.EDIT_SYSTEM.replace(":id", id).replace(":nickname", nickname)),
     delete: () => alert("delete"),
   };
 
@@ -63,7 +63,9 @@ const DetailConstruction = ({ history, match }) => {
                     <Card
                       id={sys._id}
                       title={sys.name}
+                      nickname={sys.nickname}
                       description={sys.description}
+                      construction={sys.construction}
                       actions={actions}
                     />
                   </div>
