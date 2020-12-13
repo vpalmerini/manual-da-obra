@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Card } from "antd";
+import { Card, Tooltip } from "antd";
 import {
   EditOutlined, InfoCircleOutlined, DeleteOutlined,
 } from "@ant-design/icons";
@@ -14,9 +14,15 @@ const CardConstruction = ({
     <Card
       style={{ width: 300, textAlign: "center" }}
       actions={[
-        <InfoCircleOutlined onClick={() => actions.info(id)} />,
-        <EditOutlined key="edit" onClick={() => actions.edit(id)} />,
-        <DeleteOutlined onClick={() => actions.delete(id)} />,
+        <Tooltip placement="left" title="Detalhe">
+          <InfoCircleOutlined onClick={() => actions.info(id)} />
+        </Tooltip>,
+        <Tooltip placement="bottom" title="Editar">
+          <EditOutlined key="edit" onClick={() => actions.edit(id)} />
+        </Tooltip>,
+        <Tooltip placement="right" title="Remover">
+          <DeleteOutlined onClick={() => actions.delete(id)} />
+        </Tooltip>,
       ]}
     >
       <Meta

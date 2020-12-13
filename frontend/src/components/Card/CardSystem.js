@@ -1,8 +1,8 @@
 import React from "react";
 
-import { Card } from "antd";
+import { Card, Tooltip } from "antd";
 import {
-  EditOutlined, InfoCircleOutlined, DeleteOutlined,
+  EditOutlined, InfoCircleOutlined, UploadOutlined, DeleteOutlined,
 } from "@ant-design/icons";
 
 const CardSystem = ({
@@ -14,9 +14,18 @@ const CardSystem = ({
     <Card
       style={{ width: 300, textAlign: "center" }}
       actions={[
-        <InfoCircleOutlined onClick={() => actions.info(construction, nickname)} />,
-        <EditOutlined key="edit" onClick={() => actions.edit(construction, nickname)} />,
-        <DeleteOutlined onClick={() => actions.delete(construction, nickname)} />,
+        <Tooltip placement="left" title="Detalhe">
+          <InfoCircleOutlined onClick={() => actions.info(construction, nickname)} />
+        </Tooltip>,
+        <Tooltip placement="bottom" title="Editar">
+          <EditOutlined key="edit" onClick={() => actions.edit(construction, nickname)} />
+        </Tooltip>,
+        <Tooltip placement="bottom" title="Upar Arquivos">
+          <UploadOutlined onClick={() => actions.upload()} />
+        </Tooltip>,
+        <Tooltip placement="right" title="Remover">
+          <DeleteOutlined onClick={() => actions.delete(construction, nickname)} />
+        </Tooltip>,
       ]}
     >
       <Meta
