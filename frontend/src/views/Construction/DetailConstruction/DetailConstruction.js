@@ -8,7 +8,7 @@ import Page from "components/Page/Page";
 import Container from "components/Container/Container";
 import CardSystem from "components/Card/CardSystem";
 import { Spin, Button, Modal } from "antd";
-import { PlusOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
+import { PlusOutlined, ExclamationCircleOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 
 import styles from "./DetailConstruction.module.scss";
@@ -65,7 +65,7 @@ const DetailConstruction = ({ history, match }) => {
       onOk() {
         return deleteSystem(id, nickname);
       },
-      onCancel() {},
+      onCancel() { },
     });
   };
 
@@ -86,7 +86,10 @@ const DetailConstruction = ({ history, match }) => {
             <div className={styles.description}>
               <h3>{location}</h3>
             </div>
-            <Button type="primary" icon={<PlusOutlined />} onClick={() => history.push(routes.NEW_SYSTEM.replace(":id", id))}>Adicionar Sistema</Button>
+            <div className={styles.buttons}>
+              <Button icon={<ArrowLeftOutlined />} onClick={() => history.goBack()}>Voltar</Button>
+              <Button type="primary" icon={<PlusOutlined />} onClick={() => history.push(routes.NEW_SYSTEM.replace(":id", id))}>Adicionar Sistema</Button>
+            </div>
             <div className={styles.systems}>
               {systems && systems.length > 0 ? (
                 systems.map((sys) => (
