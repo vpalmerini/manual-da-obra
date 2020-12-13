@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { detail } from "services/system.service";
+import { detail, upload } from "services/system.service";
 
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
@@ -41,12 +41,19 @@ const UploadSystem = ({ match }) => {
 
   const props = {
     name: "file",
-    multiple: true,
+    customRequest: (options) => {
+      const data = new FormData();
+      data.append("file", options.file);
+      upload(id, nickname, data)
+        .then((response) => {
+          options.onSuccess(response.data, options.file);
+        })
+        .catch((err) => {
+          options.onError(err);
+        });
+    },
     onChange(info) {
       const { status } = info.file;
-      if (status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
       if (status === "done") {
         message.success(`${info.file.name} carregada com sucesso!.`);
       } else if (status === "error") {

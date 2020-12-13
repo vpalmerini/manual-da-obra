@@ -4,16 +4,12 @@ import { create } from "services/system.service";
 
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
-import {
-  Input, Button, Upload, message,
-} from "antd";
-import { InboxOutlined } from "@ant-design/icons";
+import { Input, Button } from "antd";
 import { toast } from "react-toastify";
 
 import styles from "./NewSystem.module.scss";
 
 const { TextArea } = Input;
-const { Dragger } = Upload;
 
 const NewSystem = ({ history, match }) => {
   const [name, setName] = useState("");
@@ -35,22 +31,6 @@ const NewSystem = ({ history, match }) => {
       });
   };
 
-  const props = {
-    name: "file",
-    multiple: true,
-    onChange(info) {
-      const { status } = info.file;
-      if (status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (status === "done") {
-        message.success(`${info.file.name} file uploaded successfully.`);
-      } else if (status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-  };
-
   return (
     <Page>
       <Container>
@@ -64,17 +44,6 @@ const NewSystem = ({ history, match }) => {
             </div>
             <div className={styles.input}>
               <TextArea rows={3} placeholder="Descrição" value={description} onChange={(e) => setDescription(e.target.value)} />
-            </div>
-            <div className={styles.files}>
-              <Dragger {...props}>
-                <p className="ant-upload-drag-icon">
-                  <InboxOutlined />
-                </p>
-                <p className="ant-upload-text">Clique ou arraste arquivos pra cá!</p>
-                <p className="ant-upload-hint">
-                  Arquivos .pdf ou .mp4
-                </p>
-              </Dragger>
             </div>
             <div className={styles.buttons}>
               <Button onClick={() => history.goBack()}>Cancelar</Button>
