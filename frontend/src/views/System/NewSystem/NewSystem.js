@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 import { create } from "services/system.service";
-import routes from "routes/routes";
 
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
@@ -23,7 +22,7 @@ const NewSystem = ({ history, match }) => {
 
     create(id, data)
       .then(() => {
-        history.push(routes.DETAIL_CONSTRUCTION.replace(":id", match.params.id));
+        history.goBack();
         toast.success("Sistema adicionado!");
       })
       .catch(() => {
@@ -47,7 +46,7 @@ const NewSystem = ({ history, match }) => {
               <TextArea rows={3} placeholder="Descrição" value={description} onChange={(e) => setDescription(e.target.value)} />
             </div>
             <div className={styles.buttons}>
-              <Button onClick={() => history.push(routes.DETAIL_CONSTRUCTION.replace(":id", match.params.id))}>Cancelar</Button>
+              <Button onClick={() => history.goBack()}>Cancelar</Button>
               <Button type="primary" loading={isSubmitting} htmlType="submit">Enviar</Button>
             </div>
           </form>

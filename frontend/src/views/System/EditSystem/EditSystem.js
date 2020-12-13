@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 import { detail, edit } from "services/system.service";
-import routes from "routes/routes";
 
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
@@ -46,7 +45,7 @@ const EditSystem = ({ history, match }) => {
 
     edit(id, nickname, data)
       .then(() => {
-        history.push(routes.DETAIL_CONSTRUCTION.replace(":id", match.params.id));
+        history.goBack();
         toast.success("Sistema atualizado!");
       })
       .catch(() => {
@@ -71,7 +70,7 @@ const EditSystem = ({ history, match }) => {
                 <TextArea rows={3} placeholder="Descrição" value={description} onChange={(e) => setDescription(e.target.value)} />
               </div>
               <div className={styles.buttons}>
-                <Button onClick={() => history.push(routes.DETAIL_CONSTRUCTION.replace(":id", match.params.id))}>Cancelar</Button>
+                <Button onClick={() => history.goBack()}>Cancelar</Button>
                 <Button type="primary" loading={isSubmitting} htmlType="submit">Enviar</Button>
               </div>
             </form>

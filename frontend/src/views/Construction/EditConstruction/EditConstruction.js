@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 import { detail, edit } from "services/construction.service";
-import routes from "routes/routes";
 
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
@@ -41,7 +40,7 @@ const EditConstruction = ({ history, match }) => {
 
     edit(id, data)
       .then(() => {
-        history.push(routes.HOME);
+        history.goBack();
         toast.success("Obra atualizada!");
       })
       .catch(() => {
@@ -66,7 +65,7 @@ const EditConstruction = ({ history, match }) => {
                 <Input placeholder="Localização" value={location} onChange={(e) => setLocation(e.target.value)} required />
               </div>
               <div className={styles.buttons}>
-                <Button onClick={() => history.push(routes.HOME)}>Cancelar</Button>
+                <Button onClick={() => history.goBack()}>Cancelar</Button>
                 <Button type="primary" loading={isSubmitting} htmlType="submit">Enviar</Button>
               </div>
             </form>
