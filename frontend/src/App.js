@@ -8,6 +8,7 @@ import Login from "views/Login/Login";
 import NewConstruction from "views/Construction/NewConstruction/NewConstruction";
 import EditConstruction from "views/Construction/EditConstruction/EditConstruction";
 import DetailConstruction from "views/Construction/DetailConstruction/DetailConstruction";
+import NewSystem from "views/System/NewSystem/NewSystem";
 
 import { context } from "store/store";
 import types from "store/types";
@@ -41,6 +42,7 @@ const App = () => {
       <Router history={history}>
         <Switch>
           <Route path={routes.LOGIN} component={Login} />
+          <PrivateRoute path={routes.NEW_SYSTEM} component={NewSystem} />
           <PrivateRoute path={routes.EDIT_CONSTRUCTION} component={EditConstruction} />
           <PrivateRoute path={routes.DETAIL_CONSTRUCTION} component={DetailConstruction} />
           <PrivateRoute path={routes.NEW_CONSTRUCTION} component={NewConstruction} />

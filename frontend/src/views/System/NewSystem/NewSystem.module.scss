@@ -1,0 +1,23 @@
+.newSystem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .title {
+        text-align: center;
+    }
+    
+    form {
+        min-width: 300px;
+
+        .input {
+            margin: var(--spacing-medium) 0;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: var(--spacing-huge);
+        }
+    }
+}

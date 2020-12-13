@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
 
 import { detail } from "services/construction.service";
+import routes from "routes/routes";
 
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
 import Card from "components/Card/Card";
-import { Spin } from "antd";
+import { Spin, Button } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 
 import styles from "./DetailConstruction.module.scss";
 
-const DetailConstruction = ({ match }) => {
+const DetailConstruction = ({ history, match }) => {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [systems, setSystems] = useState([]);
@@ -36,6 +38,12 @@ const DetailConstruction = ({ match }) => {
     getConstruction(match.params.id);
   }, []);
 
+  const actions = {
+    info: () => alert("info"),
+    edit: () => alert("edit"),
+    delete: () => alert("delete"),
+  };
+
   return (
     <Page>
       <Container>
@@ -47,6 +55,7 @@ const DetailConstruction = ({ match }) => {
             <div className={styles.description}>
               <h3>{location}</h3>
             </div>
+            <Button type="primary" icon={<PlusOutlined />} onClick={() => history.push(routes.NEW_SYSTEM.replace(":id", match.params.id))}>Adicionar Sistema</Button>
             <div className={styles.systems}>
               {systems && systems.length > 0 ? (
                 systems.map((sys) => (
@@ -55,6 +64,7 @@ const DetailConstruction = ({ match }) => {
                       id={sys._id}
                       title={sys.name}
                       description={sys.description}
+                      actions={actions}
                     />
                   </div>
                 ))
