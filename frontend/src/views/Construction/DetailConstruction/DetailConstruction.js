@@ -94,7 +94,7 @@ const DetailConstruction = ({ history, match }) => {
             <div className={styles.systems}>
               {systems && systems.length > 0 ? (
                 systems.map((sys) => (
-                  <div className={styles.card}>
+                  <div className={styles.card} key={sys._id}>
                     <CardSystem
                       name={sys.name}
                       nickname={sys.nickname}
