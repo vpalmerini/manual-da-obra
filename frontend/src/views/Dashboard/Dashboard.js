@@ -4,7 +4,7 @@ import { list, remove } from "services/construction.service";
 
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
-import Card from "components/Card/Card";
+import CardConstruction from "components/Card/CardConstruction";
 import { toast } from "react-toastify";
 import { Spin, Button, Modal } from "antd";
 import { PlusOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
@@ -79,7 +79,7 @@ const Dashboard = ({ history }) => {
             <div className={styles.cards}>
               {constructions && constructions.map((constr) => (
                 <div key={constr._id} className={styles.card}>
-                  <Card
+                  <CardConstruction
                     id={constr._id}
                     title={constr.name}
                     description={constr.location}

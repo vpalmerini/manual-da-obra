@@ -5,8 +5,8 @@ import {
   EditOutlined, InfoCircleOutlined, DeleteOutlined,
 } from "@ant-design/icons";
 
-const CardConstruction = ({
-  id, title, nickname, description, construction, actions,
+const CardSystem = ({
+  name, nickname, description, construction, actions,
 }) => {
   const { Meta } = Card;
 
@@ -14,17 +14,17 @@ const CardConstruction = ({
     <Card
       style={{ width: 300, textAlign: "center" }}
       actions={[
-        <InfoCircleOutlined onClick={() => actions.info(id)} />,
+        <InfoCircleOutlined onClick={() => actions.info()} />,
         <EditOutlined key="edit" onClick={() => actions.edit(construction, nickname)} />,
-        <DeleteOutlined onClick={() => actions.delete(id)} />,
+        <DeleteOutlined onClick={() => actions.delete(construction, nickname)} />,
       ]}
     >
       <Meta
-        title={title}
+        title={name}
         description={description}
       />
     </Card>
   );
 };
 
-export default CardConstruction;
+export default CardSystem;
