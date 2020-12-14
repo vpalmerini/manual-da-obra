@@ -11,9 +11,12 @@
   --spacing-very-huge: 96px;
 }
 
+* {
+  font-family: "Montserrat", "Roboto", Arial, Helvetica, sans-serif;
+}
+
 body {
   margin: 0;
-  font-family: "Montserrat", "Roboto", Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
