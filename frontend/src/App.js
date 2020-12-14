@@ -17,7 +17,7 @@ import UploadSystem from "views/System/UploadSystem/UploadSystem";
 
 import { context } from "store/store";
 import types from "store/types";
-import { me, logout } from "services/auth.service";
+import { me } from "services/auth.service";
 
 import { ToastContainer } from "react-toastify";
 import routes from "routes/routes";
@@ -32,10 +32,9 @@ const App = () => {
       me()
         .then(() => {
           dispatch({ type: types.LOGIN });
-          history.push(routes.HOME);
         })
         .catch(() => {
-          logout(true);
+          dispatch({ type: types.LOGOUT });
         });
     };
     getMe();
@@ -52,7 +51,7 @@ const App = () => {
           <PrivateRoute path={routes.UPLOAD_SYSTEM} component={UploadSystem} />
           <PrivateRoute path={routes.NEW_SYSTEM} component={NewSystem} />
           <PrivateRoute path={routes.EDIT_CONSTRUCTION} component={EditConstruction} />
-          <PrivateRoute path={routes.DETAIL_SYSTEM} component={DetailSystem} />
+          <Route path={routes.DETAIL_SYSTEM} component={DetailSystem} />
           <PrivateRoute path={routes.DETAIL_CONSTRUCTION} component={DetailConstruction} />
           <PrivateRoute path={routes.HOME} component={Dashboard} />
         </Switch>
