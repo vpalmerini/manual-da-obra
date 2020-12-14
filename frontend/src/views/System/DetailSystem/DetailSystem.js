@@ -4,23 +4,34 @@ import { detail } from "services/system.service";
 
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
-import { Spin } from "antd";
+import CardFile from "components/Card/CardFile";
+import { Spin, Button } from "antd";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 
 import styles from "./DetailSystem.module.scss";
 
-const DetailSystem = ({ match }) => {
+const DetailSystem = ({ history, match }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [project, setProject] = useState("");
+  const [video, setVideo] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const getSystem = (id, nickname) => {
     setIsLoading(true);
     detail(id, nickname)
       .then((response) => {
-        const { name, description } = response.data.system;
+        const {
+          name,
+          description,
+          project,
+          video,
+        } = response.data.system;
         setName(name);
         setDescription(description);
+        setProject(project);
+        setVideo(video);
       })
       .catch(() => {
         toast.error("Ops! Aconteceu algum erro pra pegar os dados do sistema");
@@ -46,6 +57,11 @@ const DetailSystem = ({ match }) => {
             </div>
             <div className={styles.description}>
               <h3>{description}</h3>
+            </div>
+            <Button icon={<ArrowLeftOutlined />} onClick={() => history.goBack()}>Voltar</Button>
+            <div className={styles.cards}>
+              {project && <div className={styles.card}><CardFile title="Projeto PDF" url={project} type="project" /></div>}
+              {video && <div className={styles.card}><CardFile title="Vídeo" url={video} type="video" /></div>}
             </div>
           </div>
         )}

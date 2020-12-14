@@ -10,4 +10,17 @@
             color: gray;
         }
     }
+
+    button {
+        margin-bottom: var(--spacing-huge);
+    }
+
+    .cards {
+        display: flex;
+        flex-direction: column;
+
+        .card {
+            margin: var(--spacing-base) 0;
+        }
+    }
 }
