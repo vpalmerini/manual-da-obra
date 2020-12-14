@@ -4,15 +4,17 @@ import { detail, upload } from "services/system.service";
 
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
-import { Spin, Upload, message } from "antd";
-import { InboxOutlined } from "@ant-design/icons";
+import {
+  Spin, Button, Upload, message,
+} from "antd";
+import { InboxOutlined, CheckCircleFilled } from "@ant-design/icons";
 import { toast } from "react-toastify";
 
 import styles from "./UploadSystem.module.scss";
 
 const { Dragger } = Upload;
 
-const UploadSystem = ({ match }) => {
+const UploadSystem = ({ history, match }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -72,6 +74,10 @@ const UploadSystem = ({ match }) => {
             </div>
             <div className={styles.description}>
               <h3>{description}</h3>
+            </div>
+            <div className={styles.buttons}>
+              <Button onClick={() => history.goBack()}>Cancelar</Button>
+              <Button type="primary" icon={<CheckCircleFilled />} onClick={() => history.goBack()}>Concluído</Button>
             </div>
             <div className={styles.files}>
               <Dragger {...props}>

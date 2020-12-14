@@ -11,7 +11,14 @@
         }
     }
 
+    .buttons {
+        button {
+            margin: 0 var(--spacing-base);
+        }
+    }
+
     .files {
         min-width: 300px;
+        margin-top: var(--spacing-huge);
     }
 }
