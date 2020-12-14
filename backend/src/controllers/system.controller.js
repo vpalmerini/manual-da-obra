@@ -1,8 +1,7 @@
 const express = require("express");
 const { check, validationResult } = require("express-validator");
 const multer = require("multer");
-
-const upload = multer({ dest: "uploads/" });
+const uploadConfig = require("../services/upload.service");
 
 const router = express.Router();
 const SystemService = require("../services/system.service");
@@ -100,11 +99,29 @@ router.put("/:id/systems/:nickname", AuthMiddleware, async (req, res) => {
 router.post(
   "/:id/systems/:nickname",
   AuthMiddleware,
-  upload.single("file"),
+  multer(uploadConfig).single("file"),
   async (req, res) => {
     try {
+      const { id, nickname } = req.params;
+      const { contentType, location } = req.file;
+      let system;
+
+      switch (contentType) {
+        case "application/pdf":
+          system = await SystemService.updateSystem(id, nickname, {
+            project: location,
+          });
+          break;
+        case "video/mp4":
+          system = await SystemService.updateSystem(id, nickname, {
+            video: location,
+          });
+          break;
+        default:
+      }
       return res.status(200).json({
         status: 200,
+        system,
       });
     } catch (e) {
       handleError(e, res);
