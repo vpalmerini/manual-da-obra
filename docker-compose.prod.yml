@@ -5,6 +5,11 @@ services:
     image: mongo:3.6.17-xenial
     ports:
       - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
     volumes:
       - /manual_da_obra/data/configdb:/data/configdb
       - /manual_da_obra/data/db:/data/db
@@ -18,13 +23,24 @@ services:
       context: ./backend
     ports:
       - "8000:8000"
+    environment:
+      MONGO_INITDB_ROOT_PASSWORD: /run/secrets/db_password
+      TOKEN_SECRET: /run/secrets/token_secret
+      REFRESH_TOKEN_SECRET: /run/secrets/refresh_token_secret
+      AWS_ACCESS_KEY_ID: /run/secrets/aws_access_key
+      AWS_SECRET_ACCESS_KEY: /run/secrets/aws_secret_key
+      NODE_ENV: production
+    secrets:
+      - db_password
+      - token_secret
+      - refresh_token_secret
+      - aws_access_key
+      - aws_secret_key
     env_file:
       - .env/prod/app.env
-    environment:
-      - NODE_ENV: production
     volumes:
       - /usr/src/app/node_modules
-      - /usr/src/app/log:/log
+      - ./backend/log:/usr/src/app/log
     depends_on:
       - mongo
     networks:
@@ -32,12 +48,11 @@ services:
     command: node app.js
 
   frontend:
-    image: manual_da_obra_frontend
+    image: vpalmerini/manual_da_obra_frontend
     build:
       context: ./frontend
       args:
         API_URL: /api
-    container_name: ui
     ports:
       - "80:80"
       - "443:443"
@@ -52,3 +67,15 @@ services:
 networks:
   app-network:
     driver: overlay
+
+secrets:
+  db_password:
+   file: secrets/db_password.secret
+  token_secret:
+    file: secrets/token_secret.secret
+  refresh_token_secret:
+    file: secrets/refresh_token_secret.secret
+  aws_access_key:
+    file: secrets/aws_access_key.secret
+  aws_secret_key:
+    file: secrets/aws_secret_key.secret

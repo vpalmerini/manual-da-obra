@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const fs = require("fs");
 
 const { getUserWithPassword } = require("../services/auth.service");
 const UserService = require("../services/user.service");
@@ -12,6 +13,15 @@ const { clearCookies } = require("../helpers/cookie");
 
 const jwtConfig = require("../jwt");
 const { AuthMiddleware, VerifyRefreshToken } = require("../middlewares/auth.middleware");
+
+let { TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
+const { NODE_ENV } = process.env;
+const isProduction = NODE_ENV === "production";
+
+if (isProduction) {
+  TOKEN_SECRET = fs.readFileSync(TOKEN_SECRET, "utf-8").trim();
+  REFRESH_TOKEN_SECRET = fs.readFileSync(REFRESH_TOKEN_SECRET, "utf-8").trim();
+}
 
 router.post("/", async (req, res) => {
   try {
@@ -25,8 +35,6 @@ router.post("/", async (req, res) => {
     if (!compare) {
       throw new ErrorHandler(401, "Invalid credentials");
     }
-
-    const { TOKEN_SECRET, REFRESH_TOKEN_SECRET, NODE_ENV } = process.env;
 
     const token = jwt.sign(
       { id: user._id, email: user.email, name: user.name },
@@ -47,11 +55,11 @@ router.post("/", async (req, res) => {
     return res
       .cookie("token", token, {
         httpOnly: true,
-        secure: NODE_ENV === "production",
+        secure: isProduction,
       })
       .cookie("refresh_token", refreshToken, {
         httpOnly: true,
-        secure: NODE_ENV === "production",
+        secure: isProduction,
       })
       .status(200)
       .json({
@@ -66,7 +74,6 @@ router.post("/", async (req, res) => {
 router.post("/refresh", VerifyRefreshToken, async (req, res) => {
   try {
     const { refreshToken } = req.authContext;
-    const { TOKEN_SECRET, REFRESH_TOKEN_SECRET, NODE_ENV } = process.env;
 
     const { id, email, name } = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET);
     const token = jwt.sign({ id, email, name }, TOKEN_SECRET, {
@@ -76,7 +83,7 @@ router.post("/refresh", VerifyRefreshToken, async (req, res) => {
     return res
       .cookie("token", token, {
         httpOnly: true,
-        secure: NODE_ENV === "production",
+        secure: isProduction,
       })
       .status(200)
       .json({

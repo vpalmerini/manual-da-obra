@@ -12,8 +12,9 @@ const app = express();
 const { UI_URL, PORT, NODE_ENV } = process.env;
 const port = PORT;
 const basePath = "/api";
+let isProduction = NODE_ENV === "production";
 
-if (NODE_ENV === "production") {
+if (isProduction) {
   const accessLogStream = rfs.createStream('access.log', {
     interval: '7d',
     path: path.join(__dirname, 'log')
@@ -40,6 +41,8 @@ app.use((err, req, res) => {
   handleError(err, res);
 });
 
-console.log(`API is running in http://localhost:${port}/api`);
+if (!isProduction) {
+  console.log(`API is running in http://localhost:${port}/api`);
+}
 
 app.listen(port);
