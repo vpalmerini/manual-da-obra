@@ -15,7 +15,13 @@ RUN yarn
 
 COPY . .
 
+ARG API_URL
+
+ENV REACT_APP_API_URL=${API_URL}
+
 EXPOSE 3000
+
+RUN yarn build
 
 FROM nginx:1.17.9-alpine
 
