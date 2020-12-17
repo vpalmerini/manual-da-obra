@@ -13,15 +13,17 @@ const SystemSchema = new Schema({
   description: {
     type: String,
   },
-  project: {
-    type: String,
-  },
-  video: {
-    type: String,
-  },
+  files: [{
+    type: Schema.Types.ObjectId,
+    ref: "File",
+  }],
   construction: {
     type: Schema.Types.ObjectId,
     ref: "Construction",
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now(),
   },
 });
 

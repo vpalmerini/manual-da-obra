@@ -10,14 +10,14 @@ const ConstructionSchema = new Schema({
     type: String,
     required: true,
   },
+  systems: [{
+    type: Schema.Types.ObjectId,
+    ref: "System"
+  }],
   createdAt: {
     type: Date,
     default: Date.now(),
   },
-  systems: [{
-    type: Schema.Types.ObjectId,
-    ref: "System"
-  }]
 });
 
 module.exports = mongoose.model("Construction", ConstructionSchema);
