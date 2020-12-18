@@ -36,7 +36,7 @@ router.post(
         default:
       }
 
-      const system = await SystemService.getSystem(id, nickname);
+      let system = await SystemService.getSystem(id, nickname);
       if (!system) {
         throw new ErrorHandler(400, "Invalid System");
       }
@@ -47,6 +47,11 @@ router.post(
         url: location,
         system: system._id,
       });
+      
+      system = await SystemService.addFile(
+        system._id,
+        file._id,
+      );
 
       return res.status(200).json({
         status: 200,

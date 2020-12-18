@@ -22,7 +22,7 @@ const createSystem = async (data) => {
 
 const getSystem = async (id, nickname) => {
   try {
-    return await System.findOne({ construction: id, nickname });
+    return await System.findOne({ construction: id, nickname }).populate("files");
   } catch (e) {
     throw new ErrorHandler(500, e._message);
   }
@@ -49,10 +49,19 @@ const updateSystem = async (id, nickname, data) => {
   }
 };
 
+const addFile = async (id, fileId) => {
+  try {
+    return await System.findOneAndUpdate({ _id: id }, {$push: {files: fileId}}, { new: true, useFindAndModify: false });
+  } catch (e) {
+    throw new ErrorHandler(500, e._message);
+  }
+}
+
 module.exports = {
   getSystems,
   createSystem,
   getSystem,
   deleteSystem,
   updateSystem,
+  addFile,
 };
