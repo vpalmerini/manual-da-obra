@@ -47,7 +47,7 @@ router.post(
         url: location,
         system: system._id,
       });
-      
+
       system = await SystemService.addFile(
         system._id,
         file._id,
@@ -80,5 +80,32 @@ router.get("/:id/systems/:nickname/files/:file_id", async (req, res) => {
     handleError(e, res);
   }
 });
+
+router.put(
+  "/:id/systems/:nickname/files/:file_id",
+  AuthMiddleware,
+  [check("type").isEmpty().withMessage("Type cannot be changed")],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json(errors.array());
+    }
+    try {
+      const { file_id } = req.params;
+      const file = await FileService.updateFile(file_id, req.body);
+      if (!file) {
+        return res.status(404).json({
+          status: 404,
+        });
+      }
+      return res.status(200).json({
+        status: 200,
+        file,
+      });
+    } catch (e) {
+      handleError(e, res);
+    }
+  }
+);
 
 module.exports = router;
