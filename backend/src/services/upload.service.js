@@ -44,4 +44,15 @@ const config = {
   },
 };
 
-module.exports = config;
+const deleteParams = (key) => {
+  return {
+    Bucket: BUCKET_NAME,
+    Key: key,
+  }
+}
+
+module.exports = {
+  config,
+  deleteParams,
+  s3,
+};

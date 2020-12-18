@@ -14,6 +14,9 @@ const FileSchema = new Schema({
   url: {
     type: String
   },
+  key: {
+    type: String,
+  },
   system: {
     type: Schema.Types.ObjectId,
     ref: "System",

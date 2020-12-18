@@ -1,7 +1,7 @@
 const express = require("express");
 const { check, validationResult } = require("express-validator");
 const multer = require("multer");
-const uploadConfig = require("../services/upload.service");
+const { config, deleteParams, s3 } = require("../services/upload.service");
 
 const router = express.Router();
 const FileService = require("../services/file.service");
@@ -12,7 +12,7 @@ const { AuthMiddleware } = require("../middlewares/auth.middleware");
 router.post(
   "/:id/systems/:nickname/files",
   AuthMiddleware,
-  multer(uploadConfig).single("file"),
+  multer(config).single("file"),
   [check("name").not().isEmpty().withMessage("Name is missing")],
   async (req, res) => {
     const errors = validationResult(req);
@@ -22,7 +22,7 @@ router.post(
 
     try {
       const { id, nickname } = req.params;
-      const { contentType, location } = req.file;
+      const { contentType, location, key } = req.file;
       const { name } = req.body;
       let type;
 
@@ -45,6 +45,7 @@ router.post(
         name,
         type,
         url: location,
+        key,
         system: system._id,
       });
 
@@ -107,5 +108,29 @@ router.put(
     }
   }
 );
+
+router.delete("/:id/systems/:nickname/files/:id_file", AuthMiddleware, async (req, res) => {
+  try {
+    const { id_file } = req.params;
+    const file = await FileService.deleteFile({ _id: id_file });
+    if (!file) {
+      return res.status(404).json({
+        status: 404,
+      });
+    }
+    const params = deleteParams(file.key);
+    await s3.deleteObject(params).promise()
+      .then(() => {
+        return res.status(202).json({
+          status: 202,
+        });
+      })
+      .catch(() => {
+        throw new ErrorHandler(500, "Error while deleting object")
+      });
+  } catch (e) {
+    handleError(e, res);
+  }
+});
 
 module.exports = router;
