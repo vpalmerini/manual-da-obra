@@ -63,4 +63,22 @@ router.post(
   }
 );
 
+router.get("/:id/systems/:nickname/files/:file_id", async (req, res) => {
+  try {
+    const { file_id } = req.params;
+    const file = await FileService.getFile(file_id);
+    if (!file) {
+      return res.status(404).json({
+        status: 404,
+      });
+    }
+    return res.status(200).json({
+      status: 200,
+      file,
+    });
+  } catch (e) {
+    handleError(e, res);
+  }
+});
+
 module.exports = router;
