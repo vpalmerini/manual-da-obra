@@ -5,7 +5,7 @@ import { detail, upload } from "services/system.service";
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
 import {
-  Spin, Button, Upload, message,
+  Spin, Button, Input, Upload, message,
 } from "antd";
 import { InboxOutlined, CheckCircleFilled } from "@ant-design/icons";
 import { toast } from "react-toastify";
@@ -17,6 +17,7 @@ const { Dragger } = Upload;
 const UploadSystem = ({ history, match }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [fileName, setFileName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const getSystem = (id, nickname) => {
@@ -41,23 +42,36 @@ const UploadSystem = ({ history, match }) => {
     getSystem(id, nickname);
   }, []);
 
+  const submitFile = (id, nickname, fileName, options) => {
+    const data = new FormData();
+    data.append("file", options.file);
+    data.append("name", fileName);
+    upload(id, nickname, data)
+      .then((response) => {
+        options.onSuccess(response.data, options.file);
+        history.goBack();
+      })
+      .catch((err) => {
+        options.onError(err);
+      });
+  };
+
   const props = {
     name: "file",
+    beforeUpload: () => {
+      if (!fileName) {
+        toast.error("Ops! Seu arquivo precisa de um nome");
+        return false;
+      }
+      return true;
+    },
     customRequest: (options) => {
-      const data = new FormData();
-      data.append("file", options.file);
-      upload(id, nickname, data)
-        .then((response) => {
-          options.onSuccess(response.data, options.file);
-        })
-        .catch((err) => {
-          options.onError(err);
-        });
+      submitFile(id, nickname, fileName, options);
     },
     onChange(info) {
       const { status } = info.file;
       if (status === "done") {
-        message.success(`${info.file.name} carregada com sucesso!.`);
+        message.success(`${info.file.name} carregado com sucesso!.`);
       } else if (status === "error") {
         message.error(`Upload do arquivo ${info.file.name} falhou.`);
       }
@@ -80,11 +94,12 @@ const UploadSystem = ({ history, match }) => {
               <Button type="primary" icon={<CheckCircleFilled />} onClick={() => history.goBack()}>Concluído</Button>
             </div>
             <div className={styles.files}>
+              <Input placeholder="Nome do arquivo" value={fileName} onChange={(e) => setFileName(e.target.value)} />
               <Dragger {...props}>
                 <p className="ant-upload-drag-icon">
                   <InboxOutlined />
                 </p>
-                <p className="ant-upload-text">Clique ou arraste arquivos pra cá!</p>
+                <p className="ant-upload-text">Clique ou arraste um arquivo pra cá!</p>
                 <p className="ant-upload-hint">
                   Arquivos .pdf ou .mp4
                 </p>

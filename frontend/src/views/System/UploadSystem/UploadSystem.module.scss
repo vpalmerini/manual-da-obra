@@ -18,7 +18,11 @@
     }
 
     .files {
-        min-width: 300px;
+        min-width: 320px;
         margin-top: var(--spacing-huge);
+
+        input {
+            margin-bottom: var(--spacing-large);
+        }
     }
 }
