@@ -2,7 +2,7 @@ import React from "react";
 
 import { Card, Tooltip } from "antd";
 import {
-  EditOutlined, InfoCircleOutlined, UploadOutlined, DeleteOutlined,
+  EditOutlined, InfoCircleOutlined, UploadOutlined, FileOutlined, DeleteOutlined,
 } from "@ant-design/icons";
 
 const CardSystem = ({
@@ -22,6 +22,9 @@ const CardSystem = ({
         </Tooltip>,
         <Tooltip placement="bottom" title="Upar Arquivos">
           <UploadOutlined onClick={() => actions.upload(construction, nickname)} />
+        </Tooltip>,
+        <Tooltip placement="bottom" title="Acessar Arquivos">
+          <FileOutlined onClick={() => actions.files(construction, nickname)} />
         </Tooltip>,
         <Tooltip placement="right" title="Remover">
           <DeleteOutlined onClick={() => actions.delete(construction, nickname)} />

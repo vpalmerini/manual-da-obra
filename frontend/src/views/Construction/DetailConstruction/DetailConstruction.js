@@ -73,6 +73,7 @@ const DetailConstruction = ({ history, match }) => {
     info: (id, nickname) => history.push(routes.DETAIL_SYSTEM.replace(":id", id).replace(":nickname", nickname)),
     edit: (id, nickname) => history.push(routes.EDIT_SYSTEM.replace(":id", id).replace(":nickname", nickname)),
     upload: (id, nickname) => history.push(routes.UPLOAD_SYSTEM.replace(":id", id).replace(":nickname", nickname)),
+    files: (id, nickname) => history.push(routes.FILES_SYSTEM.replace(":id", id).replace(":nickname", nickname)),
     delete: (id, nickname) => showDeleteConfirm(id, nickname),
   };
 
