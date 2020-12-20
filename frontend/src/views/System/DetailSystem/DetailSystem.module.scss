@@ -11,8 +11,11 @@
         }
     }
 
-    button {
+    .buttons {
         margin-bottom: var(--spacing-huge);
+        button {
+            margin: var(--spacing-small) var(--spacing-base);
+        }
     }
 
     .cards {

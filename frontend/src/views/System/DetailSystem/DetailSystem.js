@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 
 import { detail } from "services/system.service";
+import routes from "routes/routes";
 
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
 import CardFile from "components/Card/CardFile";
 import { Spin, Button } from "antd";
-import { ArrowLeftOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, UploadOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 
 import styles from "./DetailSystem.module.scss";
@@ -14,8 +15,7 @@ import styles from "./DetailSystem.module.scss";
 const DetailSystem = ({ history, match }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [project, setProject] = useState("");
-  const [video, setVideo] = useState("");
+  const [files, setFiles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const getSystem = (id, nickname) => {
@@ -25,13 +25,11 @@ const DetailSystem = ({ history, match }) => {
         const {
           name,
           description,
-          project,
-          video,
+          files,
         } = response.data.system;
         setName(name);
         setDescription(description);
-        setProject(project);
-        setVideo(video);
+        setFiles(files);
       })
       .catch(() => {
         toast.error("Ops! Aconteceu algum erro pra pegar os dados do sistema");
@@ -58,10 +56,18 @@ const DetailSystem = ({ history, match }) => {
             <div className={styles.description}>
               <h3>{description}</h3>
             </div>
-            <Button icon={<ArrowLeftOutlined />} onClick={() => history.goBack()}>Voltar</Button>
+            <div className={styles.buttons}>
+              <Button icon={<ArrowLeftOutlined />} onClick={() => history.goBack()}>Voltar</Button>
+              <Button type="primary" icon={<UploadOutlined />} onClick={() => history.push(routes.UPLOAD_SYSTEM.replace(":id", id).replace(":nickname", nickname))}>Upar Arquivo</Button>
+            </div>
             <div className={styles.cards}>
-              {project && <div className={styles.card}><CardFile title="Projeto PDF" url={project} type="project" /></div>}
-              {video && <div className={styles.card}><CardFile title="Vídeo" url={video} type="video" /></div>}
+              {files && files.length > 0 ? (
+                files.map((file) => (
+                  <div className={styles.card}>
+                    <CardFile title={file.name} url={file.url} type={file.type} />
+                  </div>
+                ))
+              ) : <h4>Este sistema não possui nenhum arquivo</h4>}
             </div>
           </div>
         )}
