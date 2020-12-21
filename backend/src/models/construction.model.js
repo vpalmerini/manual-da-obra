@@ -14,6 +14,9 @@ const ConstructionSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "System"
   }],
+  image: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),

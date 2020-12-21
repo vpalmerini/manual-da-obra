@@ -12,6 +12,7 @@ import styles from "./EditConstruction.module.scss";
 const EditConstruction = ({ history, match }) => {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
+  const [imageURL, setImageURL] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -20,9 +21,10 @@ const EditConstruction = ({ history, match }) => {
       setIsLoading(true);
       detail(id)
         .then((response) => {
-          const { name, location } = response.data.construction;
+          const { name, location, image } = response.data.construction;
           setName(name);
           setLocation(location);
+          setImageURL(image);
         })
         .catch(() => {
           toast.error("Ops! Aconteceu algum erro pra pegar os dados da obra");
@@ -57,12 +59,19 @@ const EditConstruction = ({ history, match }) => {
             <div className={styles.title}>
               <h1>Editar Obra</h1>
             </div>
-            <form onSubmit={(e) => submitConstruction(e, match.params.id, { name, location })}>
+            <form
+              onSubmit={(e) => {
+                submitConstruction(e, match.params.id, { name, location, image: imageURL });
+              }}
+            >
               <div className={styles.input}>
                 <Input placeholder="Nome" value={name} onChange={(e) => setName(e.target.value)} required />
               </div>
               <div className={styles.input}>
                 <Input placeholder="Localização" value={location} onChange={(e) => setLocation(e.target.value)} required />
+              </div>
+              <div className={styles.input}>
+                <Input placeholder="URL da Imagem" value={imageURL} onChange={(e) => setImageURL(e.target.value)} />
               </div>
               <div className={styles.buttons}>
                 <Button onClick={() => history.goBack()}>Cancelar</Button>
