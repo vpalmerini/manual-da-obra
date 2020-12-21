@@ -20,13 +20,22 @@
     ],
     "settings": {
         "import/resolver": {
-          "node": {
-            "paths": ["src"]
-          }
+            "node": {
+                "paths": [
+                    "src"
+                ]
+            }
         }
-      },    
+    },
     "rules": {
-        "react/jsx-filename-extension": [1, { "extensions": [".js"] }],
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [
+                    ".js"
+                ]
+            }
+        ],
         "quotes": [
             "error",
             "double"
@@ -36,6 +45,7 @@
         "react/jsx-props-no-spreading": "off",
         "no-underscore-dangle": "off",
         "import/prefer-default-export": "off",
-        "import/no-extraneous-dependencies": "off"
+        "import/no-extraneous-dependencies": "off",
+        "camelcase": "off"
     }
 }

@@ -1,0 +1,15 @@
+.file {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  .type {
+    color: gray;
+    margin-bottom: var(--spacing-base);
+  }
+
+  .link {
+    margin-bottom: var(--spacing-huge);
+  }
+}

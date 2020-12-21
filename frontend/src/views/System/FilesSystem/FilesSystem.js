@@ -5,7 +5,7 @@ import routes from "routes/routes";
 
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
-import CardFile from "components/Card/CardFile";
+import CardFileEdit from "components/Card/CardFileEdit";
 import { Spin, Button } from "antd";
 import { ArrowLeftOutlined, UploadOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
@@ -45,6 +45,12 @@ const FilesSystem = ({ history, match }) => {
     getSystem(id, nickname);
   }, []);
 
+  const actions = {
+    info: (id, nickname, file_id) => history.push(routes.DETAIL_FILE.replace(":id", id).replace(":nickname", nickname).replace(":file_id", file_id)),
+    edit: (id) => alert(id),
+    delete: (id) => alert(id),
+  };
+
   return (
     <Page>
       <Container>
@@ -63,8 +69,15 @@ const FilesSystem = ({ history, match }) => {
             <div className={styles.cards}>
               {files && files.length > 0 ? (
                 files.map((file) => (
-                  <div className={styles.card}>
-                    <CardFile title={file.name} url={file.url} type={file.type} />
+                  <div className={styles.card} key={file._id}>
+                    <CardFileEdit
+                      file_id={file._id}
+                      title={file.name}
+                      type={file.type}
+                      actions={actions}
+                      construction={id}
+                      nickname={nickname}
+                    />
                   </div>
                 ))
               ) : <h4>Este sistema não possui nenhum arquivo</h4>}

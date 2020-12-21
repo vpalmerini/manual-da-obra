@@ -11,6 +11,8 @@ const routes = {
   DETAIL_SYSTEM: "/:id/:nickname",
   UPLOAD_SYSTEM: "/:id/:nickname/upload",
   FILES_SYSTEM: "/:id/:nickname/files",
+
+  DETAIL_FILE: "/:id/:nickname/files/:file_id",
 };
 
 export default routes;
