@@ -7,7 +7,7 @@ import Container from "components/Container/Container";
 import {
   Spin, Button, Input, Upload, message,
 } from "antd";
-import { InboxOutlined, CheckCircleFilled } from "@ant-design/icons";
+import { InboxOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 
 import styles from "./UploadSystem.module.scss";
@@ -91,7 +91,6 @@ const UploadSystem = ({ history, match }) => {
             </div>
             <div className={styles.buttons}>
               <Button onClick={() => history.goBack()}>Cancelar</Button>
-              <Button type="primary" icon={<CheckCircleFilled />} onClick={() => history.goBack()}>Concluído</Button>
             </div>
             <div className={styles.files}>
               <Input placeholder="Nome do arquivo" value={fileName} onChange={(e) => setFileName(e.target.value)} />
