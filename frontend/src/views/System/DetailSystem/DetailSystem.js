@@ -5,8 +5,8 @@ import { detail } from "services/system.service";
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
 import CardFile from "components/Card/CardFile";
-import { Spin, Button } from "antd";
-import { ArrowLeftOutlined } from "@ant-design/icons";
+import { Spin, Button, message } from "antd";
+import { ArrowLeftOutlined, CopyOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 
 import styles from "./DetailSystem.module.scss";
@@ -47,6 +47,11 @@ const DetailSystem = ({ history, match }) => {
     getSystem(id, nickname);
   }, []);
 
+  const copyLink = (text) => {
+    navigator.clipboard.writeText(text);
+    message.info("Link copiado!");
+  };
+
   return (
     <Page>
       <div style={{
@@ -74,6 +79,7 @@ const DetailSystem = ({ history, match }) => {
                 >
                   Voltar
                 </Button>
+                <Button type="primary" icon={<CopyOutlined />} onClick={() => copyLink(window.location.href)}>Copiar Link</Button>
               </div>
               <div className={styles.cards}>
                 {files && files.length > 0 ? (
