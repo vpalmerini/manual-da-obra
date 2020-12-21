@@ -1,7 +1,8 @@
 const express = require("express");
 const { check, validationResult } = require("express-validator");
 const multer = require("multer");
-const { config, deleteParams, s3 } = require("../services/upload.service");
+const s3 = require("../s3");
+const { config, deleteParams } = require("../services/upload.service");
 
 const router = express.Router();
 const FileService = require("../services/file.service");
