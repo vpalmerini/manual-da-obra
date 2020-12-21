@@ -13,6 +13,7 @@ const routes = {
   FILES_SYSTEM: "/:id/:nickname/files",
 
   DETAIL_FILE: "/:id/:nickname/files/:file_id",
+  EDIT_FILE: "/:id/:nickname/files/:file_id/edit",
 };
 
 export default routes;

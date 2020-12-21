@@ -17,6 +17,7 @@ import UploadSystem from "views/System/UploadSystem/UploadSystem";
 import FilesSystem from "views/System/FilesSystem/FilesSystem";
 
 import DetailFile from "views/File/DetailFile/DetailFile";
+import EditFile from "views/File/EditFile/EditFile";
 
 import { context } from "store/store";
 import types from "store/types";
@@ -54,6 +55,7 @@ const App = () => {
           <PrivateRoute path={routes.UPLOAD_SYSTEM} component={UploadSystem} />
           <PrivateRoute path={routes.NEW_SYSTEM} component={NewSystem} />
           <PrivateRoute path={routes.EDIT_CONSTRUCTION} component={EditConstruction} />
+          <PrivateRoute path={routes.EDIT_FILE} component={EditFile} />
           <PrivateRoute path={routes.DETAIL_FILE} component={DetailFile} />
           <PrivateRoute path={routes.FILES_SYSTEM} component={FilesSystem} />
           <Route path={routes.DETAIL_SYSTEM} component={DetailSystem} />

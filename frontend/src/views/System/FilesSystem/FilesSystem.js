@@ -47,7 +47,7 @@ const FilesSystem = ({ history, match }) => {
 
   const actions = {
     info: (id, nickname, file_id) => history.push(routes.DETAIL_FILE.replace(":id", id).replace(":nickname", nickname).replace(":file_id", file_id)),
-    edit: (id) => alert(id),
+    edit: (id, nickname, file_id) => history.push(routes.EDIT_FILE.replace(":id", id).replace(":nickname", nickname).replace(":file_id", file_id)),
     delete: (id) => alert(id),
   };
 

@@ -18,10 +18,10 @@ const CardFileEdit = ({
           <InfoCircleOutlined onClick={() => actions.info(construction, nickname, file_id)} />
         </Tooltip>,
         <Tooltip placement="bottom" title="Editar">
-          <EditOutlined key="edit" onClick={() => actions.edit(id)} />
+          <EditOutlined key="edit" onClick={() => actions.edit(construction, nickname, file_id)} />
         </Tooltip>,
         <Tooltip placement="right" title="Remover">
-          <DeleteOutlined onClick={() => actions.delete(id)} />
+          <DeleteOutlined onClick={() => actions.delete(construction)} />
         </Tooltip>,
       ]}
     >
