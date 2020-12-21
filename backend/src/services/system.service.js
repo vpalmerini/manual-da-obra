@@ -22,7 +22,7 @@ const createSystem = async (data) => {
 
 const getSystem = async (id, nickname) => {
   try {
-    return await System.findOne({ construction: id, nickname }).populate("files");
+    return await System.findOne({ construction: id, nickname }).populate("files").populate("construction", ["name", "image"]);
   } catch (e) {
     throw new ErrorHandler(500, e._message);
   }

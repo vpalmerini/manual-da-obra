@@ -18,6 +18,7 @@ const { confirm } = Modal;
 const DetailConstruction = ({ history, match }) => {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
+  const [imageURL, setImageURL] = useState("");
   const [systems, setSystems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -25,9 +26,15 @@ const DetailConstruction = ({ history, match }) => {
     setIsLoading(true);
     detail(id)
       .then((response) => {
-        const { name, location, systems } = response.data.construction;
+        const {
+          name,
+          location,
+          image,
+          systems,
+        } = response.data.construction;
         setName(name);
         setLocation(location);
+        setImageURL(image);
         setSystems(systems);
       })
       .catch(() => {
@@ -79,37 +86,52 @@ const DetailConstruction = ({ history, match }) => {
 
   return (
     <Page>
-      <Container>
-        {isLoading ? (<div className="spinner"><Spin size="large" /></div>) : (
-          <div className={styles.construction}>
-            <div className={styles.title}>
-              <h1>{name}</h1>
+      <div style={{
+        minHeight: "100vh",
+        height: "100%",
+        backgroundImage: `url(${imageURL})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+      }}
+      >
+        <Container>
+          {isLoading ? (<div className="spinner"><Spin size="large" /></div>) : (
+            <div className={styles.construction}>
+              <div className={styles.title}>
+                <h1 style={{ color: imageURL ? "#fff" : "#444" }}>{name}</h1>
+              </div>
+              <div className={styles.description}>
+                <h3 style={{ color: imageURL ? "#fff" : "#444" }}>{location}</h3>
+              </div>
+              <div className={styles.buttons}>
+                <Button
+                  icon={<ArrowLeftOutlined />}
+                  onClick={() => history.goBack()}
+                >
+                  Voltar
+                </Button>
+                <Button type="primary" icon={<PlusOutlined />} onClick={() => history.push(routes.NEW_SYSTEM.replace(":id", id))}>Adicionar Sistema</Button>
+              </div>
+              <div className={styles.systems}>
+                {systems && systems.length > 0 ? (
+                  systems.map((sys) => (
+                    <div className={styles.card} key={sys._id}>
+                      <CardSystem
+                        name={sys.name}
+                        nickname={sys.nickname}
+                        description={sys.description}
+                        construction={sys.construction}
+                        actions={actions}
+                      />
+                    </div>
+                  ))
+                ) : <h4 style={{ color: imageURL ? "#fff" : "#444" }}>Nenhum sistema cadastrado</h4>}
+              </div>
             </div>
-            <div className={styles.description}>
-              <h3>{location}</h3>
-            </div>
-            <div className={styles.buttons}>
-              <Button icon={<ArrowLeftOutlined />} onClick={() => history.goBack()}>Voltar</Button>
-              <Button type="primary" icon={<PlusOutlined />} onClick={() => history.push(routes.NEW_SYSTEM.replace(":id", id))}>Adicionar Sistema</Button>
-            </div>
-            <div className={styles.systems}>
-              {systems && systems.length > 0 ? (
-                systems.map((sys) => (
-                  <div className={styles.card} key={sys._id}>
-                    <CardSystem
-                      name={sys.name}
-                      nickname={sys.nickname}
-                      description={sys.description}
-                      construction={sys.construction}
-                      actions={actions}
-                    />
-                  </div>
-                ))
-              ) : <h4>Nenhum sistema cadastrado</h4>}
-            </div>
-          </div>
-        )}
-      </Container>
+          )}
+        </Container>
+      </div>
     </Page>
   );
 };
