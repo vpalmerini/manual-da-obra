@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
 
 import { detail } from "services/system.service";
+import { remove } from "services/file.service";
 import routes from "routes/routes";
 
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
 import CardFileEdit from "components/Card/CardFileEdit";
-import { Spin, Button } from "antd";
-import { ArrowLeftOutlined, UploadOutlined } from "@ant-design/icons";
+import { Spin, Button, Modal } from "antd";
+import { ArrowLeftOutlined, UploadOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 
 import styles from "./FilesSystem.module.scss";
+
+const { confirm } = Modal;
 
 const FilesSystem = ({ history, match }) => {
   const [name, setName] = useState("");
@@ -45,10 +48,35 @@ const FilesSystem = ({ history, match }) => {
     getSystem(id, nickname);
   }, []);
 
+  const deleteFile = (id, nickname, file_id) => {
+    remove(id, nickname, file_id)
+      .then(() => {
+        toast.success("Arquivo excluído!");
+        getSystem(id, nickname);
+      })
+      .catch(() => {
+        toast.error("Ops! Aconteceu algum erro pra excluir o arquivo");
+      });
+  };
+
+  const showDeleteConfirm = (id, nickname, file_id) => {
+    confirm({
+      title: "Tem certeza que deseja excluir o arquivo?",
+      icon: <ExclamationCircleOutlined />,
+      okText: "Remover",
+      okType: "danger",
+      cancelText: "Cancelar",
+      onOk() {
+        return deleteFile(id, nickname, file_id);
+      },
+      onCancel() { },
+    });
+  };
+
   const actions = {
     info: (id, nickname, file_id) => history.push(routes.DETAIL_FILE.replace(":id", id).replace(":nickname", nickname).replace(":file_id", file_id)),
     edit: (id, nickname, file_id) => history.push(routes.EDIT_FILE.replace(":id", id).replace(":nickname", nickname).replace(":file_id", file_id)),
-    delete: (id) => alert(id),
+    delete: (id, nickname, file_id) => showDeleteConfirm(id, nickname, file_id),
   };
 
   return (

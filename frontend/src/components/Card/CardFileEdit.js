@@ -21,7 +21,7 @@ const CardFileEdit = ({
           <EditOutlined key="edit" onClick={() => actions.edit(construction, nickname, file_id)} />
         </Tooltip>,
         <Tooltip placement="right" title="Remover">
-          <DeleteOutlined onClick={() => actions.delete(construction)} />
+          <DeleteOutlined onClick={() => actions.delete(construction, nickname, file_id)} />
         </Tooltip>,
       ]}
     >
