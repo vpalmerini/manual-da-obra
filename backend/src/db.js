@@ -26,21 +26,17 @@ const connectDB = async () => {
       useUnifiedTopology: true,
     });
 
+    const { INIT_USERNAME, INIT_PASSWORD } = process.env;
     if (isProduction) {
-      console.log("Database connected");
-      return;
-    } else {
-      const { INIT_USERNAME, INIT_EMAIL, INIT_PASSWORD } = process.env;
-      const user = {
-        username: INIT_USERNAME,
-        email: INIT_EMAIL,
-        password: INIT_PASSWORD,
-      };
-      const query = await User.findOne({ username: INIT_USERNAME });
-      if (!query) {
-        await User.create(user);
-      }
-      console.log("Database connected with user:", user);
+      INIT_PASSWORD = fs.readFileSync(INIT_PASSWORD, "utf-8").trim();
+    }
+    const user = {
+      username: INIT_USERNAME,
+      password: INIT_PASSWORD,
+    };
+    const query = await User.findOne({ username: INIT_USERNAME });
+    if (!query) {
+      await User.create(user);
     }
   } catch (e) {
     throw e;

@@ -29,6 +29,7 @@ services:
       REFRESH_TOKEN_SECRET: /run/secrets/refresh_token_secret
       AWS_ACCESS_KEY_ID: /run/secrets/aws_access_key
       AWS_SECRET_ACCESS_KEY: /run/secrets/aws_secret_key
+      INIT_PASSWORD: /run/secrets/init_password
       NODE_ENV: production
     secrets:
       - db_password
@@ -36,6 +37,7 @@ services:
       - refresh_token_secret
       - aws_access_key
       - aws_secret_key
+      - init_password
     env_file:
       - .env/prod/app.env
     volumes:
@@ -79,3 +81,5 @@ secrets:
     file: secrets/aws_access_key.secret
   aws_secret_key:
     file: secrets/aws_secret_key.secret
+  init_password:
+    file: secrets/init_password.secret
