@@ -1,8 +1,15 @@
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
 
 const { parseCookie } = require("../helpers/cookie");
 
-const { TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
+let { TOKEN_SECRET, REFRESH_TOKEN_SECRET, NODE_ENV } = process.env;
+const isProduction = NODE_ENV === "production";
+
+if (isProduction) {
+  TOKEN_SECRET = fs.readFileSync(TOKEN_SECRET, "utf-8").trim();
+  REFRESH_TOKEN_SECRET = fs.readFileSync(REFRESH_TOKEN_SECRET, "utf-8").trim();
+}
 
 const AuthMiddleware = async (req, res, next) => {
   const { headers } = req;
