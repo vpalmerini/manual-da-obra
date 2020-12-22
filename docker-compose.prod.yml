@@ -47,7 +47,7 @@ services:
       - mongo
     networks:
       - app-network
-    command: node app.js
+    command: yarn start
 
   frontend:
     image: vpalmerini/manual_da_obra_frontend

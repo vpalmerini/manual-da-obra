@@ -29,7 +29,7 @@ const connectDB = async () => {
     const { INIT_USERNAME, INIT_PASSWORD } = process.env;
     const user = {
       username: INIT_USERNAME,
-      password: isProduction ? fs.readFileSync(INIT_PASSWORD, "utf-8") : INIT_PASSWORD,
+      password: isProduction ? fs.readFileSync(INIT_PASSWORD, "utf-8").trim() : INIT_PASSWORD,
     };
     const query = await User.findOne({ username: INIT_USERNAME });
     if (!query) {
