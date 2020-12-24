@@ -1,5 +1,12 @@
 version: "3.7"
 
+networks:
+  app-network:
+    driver: overlay
+
+volumes:
+  app-logs:
+
 services:
   mongo:
     image: mongo:3.6.17-xenial
@@ -42,7 +49,7 @@ services:
       - .env/prod/app.env
     volumes:
       - /usr/src/app/node_modules
-      - ./backend/log:/usr/src/app/log
+      - app-logs:/usr/src/app/log
     depends_on:
       - mongo
     networks:
@@ -66,9 +73,28 @@ services:
       - app-network
     restart: always
 
-networks:
-  app-network:
-    driver: overlay
+  loki:
+    image: grafana/loki:2.0.0
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - app-network
+
+  promtail:
+    image: grafana/promtail:2.0.0
+    volumes:
+      - app-logs:/var/log
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - app-network
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
 
 secrets:
   db_password:
