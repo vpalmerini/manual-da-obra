@@ -32,6 +32,8 @@ The project has the following folder structure:
 ### Infra
 [Docker](https://docs.docker.com/)
 
+[Grafana](https://grafana.com/)
+
 ## Running Locally
 1. Have [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) installed in your machine
 
@@ -119,9 +121,14 @@ It is a similar process but some additional steps are required:
   9. `docker stack deploy -c docker-compose.prod.yml {your-stack-name}`
 
 
+## Logging
+
+The API uses [morgan](https://github.com/expressjs/morgan) as logger middleware. In `dev` environment it just logs in console and in `production` environment it persists in `access.log` file (inside `log/` folder).
+
+Also in `production`, the swarm has an instance of each [Grafana](https://grafana.com/) and [Loki](https://grafana.com/oss/loki/) running to get the logs, which makes it easy to visualize them.
+
 ## Improvements to be made
 
-- Monitoring of logs and set alerts
 - Pipeline of unit and integration tests
 - API documentation
 - Frontend refactor with TypeScript
