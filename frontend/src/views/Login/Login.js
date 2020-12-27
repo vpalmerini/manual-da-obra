@@ -15,7 +15,7 @@ const Login = ({ history, location }) => {
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [, dispatch] = useContext(context);
+  const { dispatch } = useContext(context);
 
   useEffect(() => {
     if (location && location.state) {
@@ -57,12 +57,23 @@ const Login = ({ history, location }) => {
           <h1>Manual da Obra</h1>
           <form onSubmit={(e) => submitLogin(e, { username, password })}>
             <div className={styles.input}>
-              <Input placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+              <Input
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
             </div>
             <div className={styles.input}>
-              <Input placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)} type="password" />
+              <Input
+                placeholder="Senha"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+              />
             </div>
-            <Button type="primary" htmlType="submit" loading={isSubmitting}>Entrar</Button>
+            <Button type="primary" htmlType="submit" loading={isSubmitting}>
+              Entrar
+            </Button>
           </form>
         </Card>
       </div>

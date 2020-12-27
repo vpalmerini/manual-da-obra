@@ -1,4 +1,5 @@
-import React, { useEffect, useContext } from "react";
+import * as React from "react";
+import { useEffect, useContext } from "react";
 
 import { Router, Switch, Route } from "react-router-dom";
 import history from "routes/history";
@@ -28,8 +29,8 @@ import routes from "routes/routes";
 import PrivateRoute from "routes/PrivateRoute";
 import "./App.css";
 
-const App = () => {
-  const [, dispatch] = useContext(context);
+const App: React.FC = () => {
+  const { dispatch } = useContext(context);
 
   useEffect(() => {
     const getMe = () => {
@@ -50,16 +51,25 @@ const App = () => {
       <Router history={history}>
         <Switch>
           <Route path={routes.LOGIN} component={Login} />
-          <PrivateRoute path={routes.NEW_CONSTRUCTION} component={NewConstruction} />
+          <PrivateRoute
+            path={routes.NEW_CONSTRUCTION}
+            component={NewConstruction}
+          />
           <PrivateRoute path={routes.EDIT_SYSTEM} component={EditSystem} />
           <PrivateRoute path={routes.UPLOAD_SYSTEM} component={UploadSystem} />
           <PrivateRoute path={routes.NEW_SYSTEM} component={NewSystem} />
-          <PrivateRoute path={routes.EDIT_CONSTRUCTION} component={EditConstruction} />
+          <PrivateRoute
+            path={routes.EDIT_CONSTRUCTION}
+            component={EditConstruction}
+          />
           <PrivateRoute path={routes.EDIT_FILE} component={EditFile} />
           <PrivateRoute path={routes.DETAIL_FILE} component={DetailFile} />
           <PrivateRoute path={routes.FILES_SYSTEM} component={FilesSystem} />
           <Route path={routes.DETAIL_SYSTEM} component={DetailSystem} />
-          <PrivateRoute path={routes.DETAIL_CONSTRUCTION} component={DetailConstruction} />
+          <PrivateRoute
+            path={routes.DETAIL_CONSTRUCTION}
+            component={DetailConstruction}
+          />
           <PrivateRoute path={routes.HOME} component={Dashboard} />
         </Switch>
       </Router>

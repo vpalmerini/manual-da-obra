@@ -5,21 +5,23 @@ import { context } from "store/store";
 import routes from "./routes";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const [state] = useContext(context);
+  const { state } = useContext(context);
 
   return (
     <Route
       {...rest}
-      render={(props) => (state.isLoggedIn ? (
-        <Component {...props} />
-      ) : (
-        <Redirect
-          to={{
-            pathname: routes.LOGIN,
-            state: { from: props.location },
-          }}
-        />
-      ))}
+      render={(props) =>
+        state.isLoggedIn ? (
+          <Component {...props} />
+        ) : (
+          <Redirect
+            to={{
+              pathname: routes.LOGIN,
+              state: { from: props.location },
+            }}
+          />
+        )
+      }
     />
   );
 };
