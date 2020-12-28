@@ -1,11 +1,15 @@
 import * as React from "react";
 import { useContext } from "react";
-import { Route, Redirect } from "react-router-dom";
+import { Route, Redirect, RouteProps } from "react-router-dom";
 
 import { context } from "store/store";
 import routes from "./routes";
 
-const PrivateRoute: React.FC = ({ component: Component, ...rest }: any) => {
+interface PrivateRouteProps extends RouteProps {
+  component: any;
+}
+
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ component: Component, ...rest }) => {
   const { state } = useContext(context);
 
   return (
@@ -13,7 +17,7 @@ const PrivateRoute: React.FC = ({ component: Component, ...rest }: any) => {
       {...rest}
       render={(props) =>
         state.isLoggedIn ? (
-          <Component {...props} />
+          <Component {...rest} />
         ) : (
           <Redirect
             to={{
