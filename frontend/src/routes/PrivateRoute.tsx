@@ -1,10 +1,11 @@
-import React, { useContext } from "react";
+import * as React from "react";
+import { useContext } from "react";
 import { Route, Redirect } from "react-router-dom";
 
 import { context } from "store/store";
 import routes from "./routes";
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
+const PrivateRoute: React.FC = ({ component: Component, ...rest }: any) => {
   const { state } = useContext(context);
 
   return (
