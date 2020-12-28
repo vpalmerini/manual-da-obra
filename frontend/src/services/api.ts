@@ -1,18 +1,18 @@
 /* eslint-disable import/no-cycle */
-import axios from "axios";
+import axios, { AxiosInstance, AxiosResponse, AxiosError } from "axios";
 import { logout } from "./auth.service";
 
 const { REACT_APP_API_URL } = process.env;
 
-const api = axios.create({
+const api: AxiosInstance = axios.create({
   baseURL: REACT_APP_API_URL,
   responseType: "json",
   withCredentials: true,
 });
 
 api.interceptors.response.use(
-  (response) => response,
-  (error) => {
+  (response: AxiosResponse) => response,
+  (error: AxiosError) => {
     if (error.response && error.response.data.status !== 401) {
       return new Promise((resolve, reject) => {
         reject(error);
