@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import * as React from "react";
+import { useState, useEffect } from "react";
+import { RouteComponentProps } from "react-router-dom";
 
 import { detail } from "services/construction.service";
 import { remove } from "services/system.service";
@@ -8,30 +10,44 @@ import Page from "components/Page/Page";
 import Container from "components/Container/Container";
 import CardSystem from "components/Card/CardSystem";
 import { Spin, Button, Modal } from "antd";
-import { PlusOutlined, ExclamationCircleOutlined, ArrowLeftOutlined } from "@ant-design/icons";
+import {
+  PlusOutlined,
+  ExclamationCircleOutlined,
+  ArrowLeftOutlined,
+} from "@ant-design/icons";
 import { toast } from "react-toastify";
 
 import styles from "./DetailConstruction.module.scss";
 
 const { confirm } = Modal;
 
-const DetailConstruction = ({ history, match }) => {
+interface RouteParams {
+  id: string;
+}
+
+interface System {
+  _id: string;
+  name: string;
+  nickname: string;
+  description: string;
+  construction: string;
+}
+
+const DetailConstruction: React.FC<RouteComponentProps<RouteParams>> = ({
+  history,
+  match,
+}) => {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [imageURL, setImageURL] = useState("");
   const [systems, setSystems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const getConstruction = (id) => {
+  const getConstruction = (id: string) => {
     setIsLoading(true);
     detail(id)
       .then((response) => {
-        const {
-          name,
-          location,
-          image,
-          systems,
-        } = response.data.construction;
+        const { name, location, image, systems } = response.data.construction;
         setName(name);
         setLocation(location);
         setImageURL(image);
@@ -51,7 +67,7 @@ const DetailConstruction = ({ history, match }) => {
     getConstruction(id);
   }, []);
 
-  const deleteSystem = (id, nickname) => {
+  const deleteSystem = (id: string, nickname: string) => {
     remove(id, nickname)
       .then(() => {
         toast.success("Sistema removido!");
@@ -62,7 +78,7 @@ const DetailConstruction = ({ history, match }) => {
       });
   };
 
-  const showDeleteConfirm = (id, nickname) => {
+  const showDeleteConfirm = (id: string, nickname: string) => {
     confirm({
       title: "Tem certeza que deseja remover o sistema?",
       icon: <ExclamationCircleOutlined />,
@@ -72,37 +88,56 @@ const DetailConstruction = ({ history, match }) => {
       onOk() {
         return deleteSystem(id, nickname);
       },
-      onCancel() { },
+      onCancel() {},
     });
   };
 
   const actions = {
-    info: (id, nickname) => history.push(routes.DETAIL_SYSTEM.replace(":id", id).replace(":nickname", nickname)),
-    edit: (id, nickname) => history.push(routes.EDIT_SYSTEM.replace(":id", id).replace(":nickname", nickname)),
-    upload: (id, nickname) => history.push(routes.UPLOAD_SYSTEM.replace(":id", id).replace(":nickname", nickname)),
-    files: (id, nickname) => history.push(routes.FILES_SYSTEM.replace(":id", id).replace(":nickname", nickname)),
-    delete: (id, nickname) => showDeleteConfirm(id, nickname),
+    info: (id: string, nickname: string) =>
+      history.push(
+        routes.DETAIL_SYSTEM.replace(":id", id).replace(":nickname", nickname)
+      ),
+    edit: (id: string, nickname: string) =>
+      history.push(
+        routes.EDIT_SYSTEM.replace(":id", id).replace(":nickname", nickname)
+      ),
+    upload: (id: string, nickname: string) =>
+      history.push(
+        routes.UPLOAD_SYSTEM.replace(":id", id).replace(":nickname", nickname)
+      ),
+    files: (id: string, nickname: string) =>
+      history.push(
+        routes.FILES_SYSTEM.replace(":id", id).replace(":nickname", nickname)
+      ),
+    delete: (id: string, nickname: string) => showDeleteConfirm(id, nickname),
   };
 
   return (
     <Page>
-      <div style={{
-        minHeight: "100vh",
-        height: "100%",
-        backgroundImage: `url(${imageURL})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-      }}
+      <div
+        style={{
+          minHeight: "100vh",
+          height: "100%",
+          backgroundImage: `url(${imageURL})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+        }}
       >
         <Container>
-          {isLoading ? (<div className="spinner"><Spin size="large" /></div>) : (
+          {isLoading ? (
+            <div className="spinner">
+              <Spin size="large" />
+            </div>
+          ) : (
             <div className={styles.construction}>
               <div className={styles.title}>
                 <h1 style={{ color: imageURL ? "#fff" : "#444" }}>{name}</h1>
               </div>
               <div className={styles.description}>
-                <h3 style={{ color: imageURL ? "#fff" : "#444" }}>{location}</h3>
+                <h3 style={{ color: imageURL ? "#fff" : "#444" }}>
+                  {location}
+                </h3>
               </div>
               <div className={styles.buttons}>
                 <Button
@@ -111,11 +146,19 @@ const DetailConstruction = ({ history, match }) => {
                 >
                   Voltar
                 </Button>
-                <Button type="primary" icon={<PlusOutlined />} onClick={() => history.push(routes.NEW_SYSTEM.replace(":id", id))}>Adicionar Sistema</Button>
+                <Button
+                  type="primary"
+                  icon={<PlusOutlined />}
+                  onClick={() =>
+                    history.push(routes.NEW_SYSTEM.replace(":id", id))
+                  }
+                >
+                  Adicionar Sistema
+                </Button>
               </div>
               <div className={styles.systems}>
                 {systems && systems.length > 0 ? (
-                  systems.map((sys) => (
+                  systems.map((sys: System) => (
                     <div className={styles.card} key={sys._id}>
                       <CardSystem
                         name={sys.name}
@@ -126,7 +169,11 @@ const DetailConstruction = ({ history, match }) => {
                       />
                     </div>
                   ))
-                ) : <h4 style={{ color: imageURL ? "#fff" : "#444" }}>Nenhum sistema cadastrado</h4>}
+                ) : (
+                  <h4 style={{ color: imageURL ? "#fff" : "#444" }}>
+                    Nenhum sistema cadastrado
+                  </h4>
+                )}
               </div>
             </div>
           )}

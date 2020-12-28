@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import * as React from "react";
+import { useState, useEffect } from "react";
+import { RouteComponentProps } from "react-router-dom";
 
 import { detail, edit } from "services/construction.service";
 
@@ -9,7 +11,20 @@ import { toast } from "react-toastify";
 
 import styles from "./EditConstruction.module.scss";
 
-const EditConstruction = ({ history, match }) => {
+interface RouteParams {
+  id: string;
+}
+
+interface Data {
+  name: string;
+  location: string;
+  image: string;
+}
+
+const EditConstruction: React.FC<RouteComponentProps<RouteParams>> = ({
+  history,
+  match,
+}) => {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [imageURL, setImageURL] = useState("");
@@ -17,7 +32,7 @@ const EditConstruction = ({ history, match }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    const getConstruction = (id) => {
+    const getConstruction = (id: string) => {
       setIsLoading(true);
       detail(id)
         .then((response) => {
@@ -36,7 +51,11 @@ const EditConstruction = ({ history, match }) => {
     getConstruction(match.params.id);
   }, []);
 
-  const submitConstruction = (e, id, data) => {
+  const submitConstruction = (
+    e: React.FormEvent<HTMLElement>,
+    id: string,
+    data: Data
+  ) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -54,28 +73,52 @@ const EditConstruction = ({ history, match }) => {
   return (
     <Page>
       <Container>
-        {isLoading ? (<div className="spinner"><Spin size="large" /></div>) : (
+        {isLoading ? (
+          <div className="spinner">
+            <Spin size="large" />
+          </div>
+        ) : (
           <div className={styles.editConstruction}>
             <div className={styles.title}>
               <h1>Editar Obra</h1>
             </div>
             <form
               onSubmit={(e) => {
-                submitConstruction(e, match.params.id, { name, location, image: imageURL });
+                submitConstruction(e, match.params.id, {
+                  name,
+                  location,
+                  image: imageURL,
+                });
               }}
             >
               <div className={styles.input}>
-                <Input placeholder="Nome" value={name} onChange={(e) => setName(e.target.value)} required />
+                <Input
+                  placeholder="Nome"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
               </div>
               <div className={styles.input}>
-                <Input placeholder="Localização" value={location} onChange={(e) => setLocation(e.target.value)} required />
+                <Input
+                  placeholder="Localização"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  required
+                />
               </div>
               <div className={styles.input}>
-                <Input placeholder="URL da Imagem" value={imageURL} onChange={(e) => setImageURL(e.target.value)} />
+                <Input
+                  placeholder="URL da Imagem"
+                  value={imageURL}
+                  onChange={(e) => setImageURL(e.target.value)}
+                />
               </div>
               <div className={styles.buttons}>
                 <Button onClick={() => history.goBack()}>Cancelar</Button>
-                <Button type="primary" loading={isSubmitting} htmlType="submit">Enviar</Button>
+                <Button type="primary" loading={isSubmitting} htmlType="submit">
+                  Enviar
+                </Button>
               </div>
             </form>
           </div>

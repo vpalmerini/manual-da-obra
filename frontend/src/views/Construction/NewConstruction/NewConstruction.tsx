@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import * as React from "react";
+import { useState } from "react";
+import { RouteComponentProps } from "react-router-dom";
 
 import { create } from "services/construction.service";
 
@@ -9,13 +11,19 @@ import { toast } from "react-toastify";
 
 import styles from "./NewConstruction.module.scss";
 
-const NewConstruction = ({ history }) => {
+interface Data {
+  name: string;
+  location: string;
+  image: string;
+}
+
+const NewConstruction: React.FC<RouteComponentProps> = ({ history }) => {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [imageURL, setImageURL] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submitConstruction = (e, data) => {
+  const submitConstruction = (e: React.FormEvent<HTMLElement>, data: Data) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -37,19 +45,39 @@ const NewConstruction = ({ history }) => {
           <div className={styles.title}>
             <h1>Adicionar Obra</h1>
           </div>
-          <form onSubmit={(e) => submitConstruction(e, { name, location, image: imageURL })}>
+          <form
+            onSubmit={(e) =>
+              submitConstruction(e, { name, location, image: imageURL })
+            }
+          >
             <div className={styles.input}>
-              <Input placeholder="Nome" value={name} onChange={(e) => setName(e.target.value)} required />
+              <Input
+                placeholder="Nome"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
             </div>
             <div className={styles.input}>
-              <Input placeholder="Localização" value={location} onChange={(e) => setLocation(e.target.value)} required />
+              <Input
+                placeholder="Localização"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                required
+              />
             </div>
             <div className={styles.input}>
-              <Input placeholder="URL da Imagem" value={imageURL} onChange={(e) => setImageURL(e.target.value)} />
+              <Input
+                placeholder="URL da Imagem"
+                value={imageURL}
+                onChange={(e) => setImageURL(e.target.value)}
+              />
             </div>
             <div className={styles.buttons}>
               <Button onClick={() => history.goBack()}>Cancelar</Button>
-              <Button type="primary" loading={isSubmitting} htmlType="submit">Enviar</Button>
+              <Button type="primary" loading={isSubmitting} htmlType="submit">
+                Enviar
+              </Button>
             </div>
           </form>
         </div>
