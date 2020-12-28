@@ -38,12 +38,11 @@ const deleteSystem = async (params) => {
 
 const updateSystem = async (id, nickname, data) => {
   try {
-    await System.findOneAndUpdate(
+    return await System.findOneAndUpdate(
       { construction: id, nickname },
       { $set: data },
       { useFindAndModify: false }
     );
-    return await System.findOne({ construction: id, nickname });
   } catch (e) {
     throw new ErrorHandler(500, e._message);
   }
