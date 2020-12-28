@@ -1,13 +1,26 @@
-import React from "react";
+import * as React from "react";
 
 import { Card, Tooltip } from "antd";
 import {
-  EditOutlined, InfoCircleOutlined, DeleteOutlined,
+  EditOutlined,
+  InfoCircleOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
 
-const CardConstruction = ({
-  id, title, description, actions,
-}) => {
+interface Action {
+  info(id: string): void;
+  edit(id: string): void;
+  delete(id: string): void;
+}
+
+interface IProps {
+  id: string;
+  title: string;
+  description: string;
+  actions: Action;
+}
+
+const CardConstruction = ({ id, title, description, actions }: IProps) => {
   const { Meta } = Card;
 
   return (
@@ -25,10 +38,7 @@ const CardConstruction = ({
         </Tooltip>,
       ]}
     >
-      <Meta
-        title={title}
-        description={description}
-      />
+      <Meta title={title} description={description} />
     </Card>
   );
 };
