@@ -1,7 +1,7 @@
 import api from "./api";
 
 export const detail = async (id: string, nickname: string, file_id: string) => {
-  api.get(`/constructions/${id}/systems/${nickname}/files/${file_id}`);
+  return api.get(`/constructions/${id}/systems/${nickname}/files/${file_id}`);
 };
 
 export const edit = async (
@@ -12,5 +12,5 @@ export const edit = async (
 ) => api.put(`/constructions/${id}/systems/${nickname}/files/${file_id}`, data);
 
 export const remove = async (id: string, nickname: string, file_id: string) => {
-  api.delete(`/constructions/${id}/systems/${nickname}/files/${file_id}`);
+  return api.delete(`/constructions/${id}/systems/${nickname}/files/${file_id}`);
 };
