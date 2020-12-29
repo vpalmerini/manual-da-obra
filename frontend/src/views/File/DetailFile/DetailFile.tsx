@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import * as React from "react";
+import { useState, useEffect } from "react";
+import { RouteComponentProps } from "react-router-dom";
 
 import { detail } from "services/file.service";
 
@@ -11,21 +13,23 @@ import { toast } from "react-toastify";
 
 import styles from "./DetailFile.module.scss";
 
-const DetailFile = ({ history, match }) => {
+interface RouteParams {
+  id: string;
+  nickname: string;
+  file_id: string;
+}
+
+const DetailFile: React.FC<RouteComponentProps<RouteParams>> = ({ history, match }) => {
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [url, setUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const getFile = (id, nickname, file_id) => {
+  const getFile = (id: string, nickname: string, file_id: string) => {
     setIsLoading(true);
     detail(id, nickname, file_id)
       .then((response) => {
-        const {
-          name,
-          type,
-          url,
-        } = response.data.file;
+        const { name, type, url } = response.data.file;
         setName(name);
         setType(type);
         setUrl(url);
@@ -47,7 +51,11 @@ const DetailFile = ({ history, match }) => {
   return (
     <Page>
       <Container>
-        {isLoading ? (<div className="spinner"><Spin size="large" /></div>) : (
+        {isLoading ? (
+          <div className="spinner">
+            <Spin size="large" />
+          </div>
+        ) : (
           <div className={styles.file}>
             <div className={styles.title}>
               <h1>{name}</h1>
@@ -56,9 +64,16 @@ const DetailFile = ({ history, match }) => {
               <h3>{type}</h3>
             </div>
             <div className={styles.link}>
-              <a href={url} target="_blank" rel="noreferrer">URL</a>
+              <a href={url} target="_blank" rel="noreferrer">
+                URL
+              </a>
             </div>
-            <Button icon={<ArrowLeftOutlined />} onClick={() => history.goBack()}>Voltar</Button>
+            <Button
+              icon={<ArrowLeftOutlined />}
+              onClick={() => history.goBack()}
+            >
+              Voltar
+            </Button>
           </div>
         )}
       </Container>
