@@ -32,4 +32,10 @@ SystemSchema.pre("save", async function (next) {
   return next();
 });
 
+SystemSchema.post("findOneAndUpdate", async function () {
+  const system = await this.model.findOne(this.getFilter());
+  system.nickname = system.name.toLowerCase().replace(/ /g, "_");
+  system.save();
+});
+
 module.exports = mongoose.model("System", SystemSchema);
