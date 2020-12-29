@@ -9,7 +9,10 @@ interface PrivateRouteProps extends RouteProps {
   component: any;
 }
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ component: Component, ...rest }) => {
+const PrivateRoute: React.FC<PrivateRouteProps> = ({
+  component: Component,
+  ...rest
+}) => {
   const { state } = useContext(context);
 
   return (

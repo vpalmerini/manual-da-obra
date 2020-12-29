@@ -19,7 +19,11 @@ api.interceptors.response.use(
       });
     }
     const originalRequest = error.config;
-    if (error.response && error.response.data && error.response.data.message === "jwt expired") {
+    if (
+      error.response &&
+      error.response.data &&
+      error.response.data.message === "jwt expired"
+    ) {
       if (originalRequest.url !== "/auth/refresh") {
         return new Promise((resolve, reject) => {
           api
@@ -35,7 +39,7 @@ api.interceptors.response.use(
     return new Promise((resolve, reject) => {
       reject(error);
     });
-  },
+  }
 );
 
 export default api;
