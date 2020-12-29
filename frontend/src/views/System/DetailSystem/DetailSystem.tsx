@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { RouteComponentProps } from "react-router-dom";
 
 import { detail } from "services/system.service";
+import { FileCard } from "interfaces/file.interface";
 
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
@@ -101,8 +102,8 @@ const DetailSystem: React.FC<RouteComponentProps<RouteParams>> = ({
               </div>
               <div className={styles.cards}>
                 {files && files.length > 0 ? (
-                  files.map((file) => (
-                    <div className={styles.card}>
+                  files.map((file: FileCard) => (
+                    <div className={styles.card} key={file._id}>
                       <CardFile
                         title={file.name}
                         url={file.url}

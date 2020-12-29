@@ -19,7 +19,10 @@ interface RouteParams {
   file_id: string;
 }
 
-const DetailFile: React.FC<RouteComponentProps<RouteParams>> = ({ history, match }) => {
+const DetailFile: React.FC<RouteComponentProps<RouteParams>> = ({
+  history,
+  match,
+}) => {
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [url, setUrl] = useState("");

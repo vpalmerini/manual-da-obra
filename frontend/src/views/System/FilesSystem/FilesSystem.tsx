@@ -4,6 +4,7 @@ import { RouteComponentProps } from "react-router-dom";
 
 import { detail } from "services/system.service";
 import { remove } from "services/file.service";
+import { FileCard } from "interfaces/file.interface";
 import routes from "routes/routes";
 
 import Page from "components/Page/Page";
@@ -139,7 +140,7 @@ const FilesSystem: React.FC<RouteComponentProps<RouteParams>> = ({
             </div>
             <div className={styles.cards}>
               {files && files.length > 0 ? (
-                files.map((file) => (
+                files.map((file: FileCard) => (
                   <div className={styles.card} key={file._id}>
                     <CardFileEdit
                       file_id={file._id}

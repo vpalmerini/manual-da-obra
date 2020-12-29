@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { RouteComponentProps } from "react-router-dom";
 
 import { detail, edit } from "services/file.service";
+import { File } from "interfaces/file.interface";
 
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
@@ -15,11 +16,6 @@ interface RouteParams {
   id: string;
   nickname: string;
   file_id: string;
-}
-
-interface Data {
-  name: string;
-  url: string;
 }
 
 const EditFile: React.FC<RouteComponentProps<RouteParams>> = ({
@@ -58,7 +54,7 @@ const EditFile: React.FC<RouteComponentProps<RouteParams>> = ({
     id: string,
     nickname: string,
     file_id: string,
-    data: Data
+    data: File
   ) => {
     e.preventDefault();
     setIsSubmitting(true);
