@@ -1,4 +1,6 @@
-import React, { useState, useContext, useEffect } from "react";
+import * as React from "react";
+import { useState, useContext, useEffect } from "react";
+import { RouteComponentProps, useLocation } from "react-router-dom";
 
 import { context } from "store/store";
 import types from "store/types";
@@ -10,12 +12,23 @@ import { Card, Input, Button } from "antd";
 import Crane from "assets/images/crane.svg";
 import styles from "./Login.module.scss";
 
-const Login = ({ history, location }) => {
+interface LocationState {
+  logout: boolean;
+  error: any;
+}
+
+interface Data {
+  username: string;
+  password: string;
+}
+
+const Login: React.FC<RouteComponentProps> = ({ history }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { dispatch } = useContext(context);
+  const location = useLocation<LocationState>();
 
   useEffect(() => {
     if (location && location.state) {
@@ -29,7 +42,7 @@ const Login = ({ history, location }) => {
     }
   }, [location]);
 
-  const submitLogin = async (e, data) => {
+  const submitLogin = async (e: React.FormEvent<HTMLElement>, data: Data) => {
     e.preventDefault();
     setIsSubmitting(true);
 
