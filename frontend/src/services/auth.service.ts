@@ -1,15 +1,20 @@
 /* eslint-disable import/no-cycle */
+import { AxiosResponse } from "axios";
+
 import history from "routes/history";
 import routes from "routes/routes";
 import api from "./api";
 
-export const login = async (username: string, password: string) => {
+export const login = (
+  username: string,
+  password: string
+): Promise<AxiosResponse<any>> => {
   return api.post("/auth", { username, password });
 };
 
-export const me = async () => api.get("/auth/me");
+export const me = async (): Promise<AxiosResponse<any>> => api.get("/auth/me");
 
-export const logout = async (error = false) => {
+export const logout = (error = false): void => {
   history.push({ pathname: routes.LOGIN, state: { logout: true, error } });
-  await api.post("/auth/logout");
+  api.post("/auth/logout");
 };
