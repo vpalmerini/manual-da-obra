@@ -9,7 +9,7 @@ interface IProps {
   type: string;
 }
 
-const CardFile = ({ title, url, type }: IProps) => {
+const CardFile: React.FC<IProps> = ({ title, url, type }: IProps) => {
   const style = {
     fontSize: 26,
     width: "100%",

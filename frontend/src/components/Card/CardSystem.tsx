@@ -25,7 +25,7 @@ interface IProps {
   actions: Action;
 }
 
-const CardSystem = ({
+const CardSystem: React.FC<IProps> = ({
   name,
   nickname,
   description,

@@ -22,9 +22,9 @@ interface IProps {
   file_id: string;
 }
 
-const CardFileEdit = ({
+const CardFileEdit: React.FC<IProps> = ({
   title,
-  type,
+  type = "video",
   actions,
   construction,
   nickname,

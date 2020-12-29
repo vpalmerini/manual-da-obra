@@ -7,6 +7,8 @@ import {
   DeleteOutlined,
 } from "@ant-design/icons";
 
+const { Meta } = Card;
+
 interface Action {
   info(id: string): void;
   edit(id: string): void;
@@ -20,9 +22,12 @@ interface IProps {
   actions: Action;
 }
 
-const CardConstruction = ({ id, title, description, actions }: IProps) => {
-  const { Meta } = Card;
-
+const CardConstruction: React.FC<IProps> = ({
+  id,
+  title,
+  description,
+  actions,
+}: IProps) => {
   return (
     <Card
       style={{ width: 300, textAlign: "center" }}
