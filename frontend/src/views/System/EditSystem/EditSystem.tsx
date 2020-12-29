@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import * as React from "react";
+import { useState, useEffect } from "react";
+import { RouteComponentProps } from "react-router-dom";
 
 import { detail, edit } from "services/system.service";
 
@@ -11,7 +13,20 @@ import styles from "./EditSystem.module.scss";
 
 const { TextArea } = Input;
 
-const EditSystem = ({ history, match }) => {
+interface RouteParams {
+  id: string;
+  nickname: string;
+}
+
+interface Data {
+  name: string;
+  description: string;
+}
+
+const EditSystem: React.FC<RouteComponentProps<RouteParams>> = ({
+  history,
+  match,
+}) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +43,9 @@ const EditSystem = ({ history, match }) => {
         setDescription(description);
       })
       .catch(() => {
-        toast.error("Ops! Aconteceu algum erro pra carregar os dados do sistema");
+        toast.error(
+          "Ops! Aconteceu algum erro pra carregar os dados do sistema"
+        );
       })
       .finally(() => {
         setIsLoading(false);
@@ -39,7 +56,12 @@ const EditSystem = ({ history, match }) => {
     getSystem();
   }, []);
 
-  const submitSystem = (e, id, nickname, data) => {
+  const submitSystem = (
+    e: React.FormEvent<HTMLElement>,
+    id: string,
+    nickname: string,
+    data: Data
+  ) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -57,21 +79,41 @@ const EditSystem = ({ history, match }) => {
   return (
     <Page>
       <Container>
-        {isLoading ? (<div className="spinner"><Spin size="large" /></div>) : (
+        {isLoading ? (
+          <div className="spinner">
+            <Spin size="large" />
+          </div>
+        ) : (
           <div className={styles.editSystem}>
             <div className={styles.title}>
               <h1>Editar Sistema</h1>
             </div>
-            <form onSubmit={(e) => submitSystem(e, id, nickname, { name, description })}>
+            <form
+              onSubmit={(e) =>
+                submitSystem(e, id, nickname, { name, description })
+              }
+            >
               <div className={styles.input}>
-                <Input placeholder="Nome" value={name} onChange={(e) => setName(e.target.value)} required />
+                <Input
+                  placeholder="Nome"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
               </div>
               <div className={styles.input}>
-                <TextArea rows={3} placeholder="Descrição" value={description} onChange={(e) => setDescription(e.target.value)} />
+                <TextArea
+                  rows={3}
+                  placeholder="Descrição"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
               </div>
               <div className={styles.buttons}>
                 <Button onClick={() => history.goBack()}>Cancelar</Button>
-                <Button type="primary" loading={isSubmitting} htmlType="submit">Enviar</Button>
+                <Button type="primary" loading={isSubmitting} htmlType="submit">
+                  Enviar
+                </Button>
               </div>
             </form>
           </div>

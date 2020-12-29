@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import * as React from "react";
+import { useState } from "react";
+import { RouteComponentProps } from "react-router-dom";
 
 import { create } from "services/system.service";
 
@@ -11,12 +13,28 @@ import styles from "./NewSystem.module.scss";
 
 const { TextArea } = Input;
 
-const NewSystem = ({ history, match }) => {
+interface RouteParams {
+  id: string;
+}
+
+interface Data {
+  name: string;
+  description: string;
+}
+
+const NewSystem: React.FC<RouteComponentProps<RouteParams>> = ({
+  history,
+  match,
+}) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submitSystem = (e, id, data) => {
+  const submitSystem = (
+    e: React.FormEvent<HTMLElement>,
+    id: string,
+    data: Data
+  ) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -38,16 +56,32 @@ const NewSystem = ({ history, match }) => {
           <div className={styles.title}>
             <h1>Adicionar Sistema</h1>
           </div>
-          <form onSubmit={(e) => submitSystem(e, match.params.id, { name, description })}>
+          <form
+            onSubmit={(e) =>
+              submitSystem(e, match.params.id, { name, description })
+            }
+          >
             <div className={styles.input}>
-              <Input placeholder="Nome" value={name} onChange={(e) => setName(e.target.value)} required />
+              <Input
+                placeholder="Nome"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
             </div>
             <div className={styles.input}>
-              <TextArea rows={3} placeholder="Descrição" value={description} onChange={(e) => setDescription(e.target.value)} />
+              <TextArea
+                rows={3}
+                placeholder="Descrição"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
             </div>
             <div className={styles.buttons}>
               <Button onClick={() => history.goBack()}>Cancelar</Button>
-              <Button type="primary" loading={isSubmitting} htmlType="submit">Enviar</Button>
+              <Button type="primary" loading={isSubmitting} htmlType="submit">
+                Enviar
+              </Button>
             </div>
           </form>
         </div>

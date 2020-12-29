@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import * as React from "react";
+import { useState, useEffect } from "react";
+import { RouteComponentProps } from "react-router-dom";
 
 import { detail, upload } from "services/system.service";
 
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
-import {
-  Spin, Button, Input, Upload, message,
-} from "antd";
+import { Spin, Button, Input, Upload, message } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 
@@ -14,13 +14,21 @@ import styles from "./UploadSystem.module.scss";
 
 const { Dragger } = Upload;
 
-const UploadSystem = ({ history, match }) => {
+interface RouteParams {
+  id: string;
+  nickname: string;
+}
+
+const UploadSystem: React.FC<RouteComponentProps<RouteParams>> = ({
+  history,
+  match,
+}) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [fileName, setFileName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const getSystem = (id, nickname) => {
+  const getSystem = (id: string, nickname: string) => {
     setIsLoading(true);
     detail(id, nickname)
       .then((response) => {
@@ -42,7 +50,12 @@ const UploadSystem = ({ history, match }) => {
     getSystem(id, nickname);
   }, []);
 
-  const submitFile = (id, nickname, fileName, options) => {
+  const submitFile = (
+    id: string,
+    nickname: string,
+    fileName: string,
+    options: any
+  ) => {
     const data = new FormData();
     data.append("file", options.file);
     data.append("name", fileName);
@@ -65,10 +78,10 @@ const UploadSystem = ({ history, match }) => {
       }
       return true;
     },
-    customRequest: (options) => {
+    customRequest: (options: any) => {
       submitFile(id, nickname, fileName, options);
     },
-    onChange(info) {
+    onChange(info: any) {
       const { status } = info.file;
       if (status === "done") {
         message.success(`${info.file.name} carregado com sucesso!.`);
@@ -81,7 +94,11 @@ const UploadSystem = ({ history, match }) => {
   return (
     <Page>
       <Container>
-        {isLoading ? (<div className="spinner"><Spin size="large" /></div>) : (
+        {isLoading ? (
+          <div className="spinner">
+            <Spin size="large" />
+          </div>
+        ) : (
           <div className={styles.system}>
             <div className={styles.title}>
               <h1>{name}</h1>
@@ -93,15 +110,19 @@ const UploadSystem = ({ history, match }) => {
               <Button onClick={() => history.goBack()}>Cancelar</Button>
             </div>
             <div className={styles.files}>
-              <Input placeholder="Nome do arquivo" value={fileName} onChange={(e) => setFileName(e.target.value)} />
+              <Input
+                placeholder="Nome do arquivo"
+                value={fileName}
+                onChange={(e) => setFileName(e.target.value)}
+              />
               <Dragger {...props}>
                 <p className="ant-upload-drag-icon">
                   <InboxOutlined />
                 </p>
-                <p className="ant-upload-text">Clique ou arraste um arquivo pra cá!</p>
-                <p className="ant-upload-hint">
-                  Arquivos .pdf ou .mp4
+                <p className="ant-upload-text">
+                  Clique ou arraste um arquivo pra cá!
                 </p>
+                <p className="ant-upload-hint">Arquivos .pdf ou .mp4</p>
               </Dragger>
             </div>
           </div>
