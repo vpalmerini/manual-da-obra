@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { RouteComponentProps } from "react-router-dom";
 
 import { list, remove } from "services/construction.service";
+import { ConstructionCard } from "interfaces/construction.interface";
 
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
@@ -15,12 +16,6 @@ import routes from "routes/routes";
 import styles from "./Dashboard.module.scss";
 
 const { confirm } = Modal;
-
-interface Construction {
-  _id: string;
-  name: string;
-  location: string;
-}
 
 const Dashboard: React.FC<RouteComponentProps> = ({ history }) => {
   const [constructions, setConstructions] = useState([]);
@@ -98,7 +93,7 @@ const Dashboard: React.FC<RouteComponentProps> = ({ history }) => {
             </Button>
             <div className={styles.cards}>
               {constructions && constructions.length > 0 ? (
-                constructions.map((constr: Construction) => (
+                constructions.map((constr: ConstructionCard) => (
                   <div key={constr._id} className={styles.card}>
                     <CardConstruction
                       id={constr._id}

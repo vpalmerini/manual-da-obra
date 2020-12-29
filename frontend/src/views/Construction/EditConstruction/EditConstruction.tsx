@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { RouteComponentProps } from "react-router-dom";
 
 import { detail, edit } from "services/construction.service";
+import { Construction } from "interfaces/construction.interface";
 
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
@@ -13,12 +14,6 @@ import styles from "./EditConstruction.module.scss";
 
 interface RouteParams {
   id: string;
-}
-
-interface Data {
-  name: string;
-  location: string;
-  image: string;
 }
 
 const EditConstruction: React.FC<RouteComponentProps<RouteParams>> = ({
@@ -54,7 +49,7 @@ const EditConstruction: React.FC<RouteComponentProps<RouteParams>> = ({
   const submitConstruction = (
     e: React.FormEvent<HTMLElement>,
     id: string,
-    data: Data
+    data: Construction
   ) => {
     e.preventDefault();
     setIsSubmitting(true);

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
 
 import { create } from "services/construction.service";
+import { Construction } from "interfaces/construction.interface";
 
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
@@ -11,19 +12,16 @@ import { toast } from "react-toastify";
 
 import styles from "./NewConstruction.module.scss";
 
-interface Data {
-  name: string;
-  location: string;
-  image: string;
-}
-
 const NewConstruction: React.FC<RouteComponentProps> = ({ history }) => {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [imageURL, setImageURL] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submitConstruction = (e: React.FormEvent<HTMLElement>, data: Data) => {
+  const submitConstruction = (
+    e: React.FormEvent<HTMLElement>,
+    data: Construction
+  ) => {
     e.preventDefault();
     setIsSubmitting(true);
 
