@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import * as React from "react";
+import { useState, useEffect } from "react";
+import { RouteComponentProps } from "react-router-dom";
 
 import { list, remove } from "services/construction.service";
 
@@ -14,7 +16,13 @@ import styles from "./Dashboard.module.scss";
 
 const { confirm } = Modal;
 
-const Dashboard = ({ history }) => {
+interface Construction {
+  _id: string;
+  name: string;
+  location: string;
+}
+
+const Dashboard: React.FC<RouteComponentProps> = ({ history }) => {
   const [constructions, setConstructions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -36,7 +44,7 @@ const Dashboard = ({ history }) => {
     getConstructions();
   }, []);
 
-  const deleteConstruction = (id) => {
+  const deleteConstruction = (id: string) => {
     remove(id)
       .then(() => {
         toast.success("Obra removida!");
@@ -47,7 +55,7 @@ const Dashboard = ({ history }) => {
       });
   };
 
-  const showDeleteConfirm = (id) => {
+  const showDeleteConfirm = (id: string) => {
     confirm({
       title: "Tem certeza que deseja remover a obra?",
       icon: <ExclamationCircleOutlined />,
@@ -57,36 +65,52 @@ const Dashboard = ({ history }) => {
       onOk() {
         return deleteConstruction(id);
       },
-      onCancel() { },
+      onCancel() {},
     });
   };
 
   const actions = {
-    info: (id) => history.push(routes.DETAIL_CONSTRUCTION.replace(":id", id)),
-    edit: (id) => history.push(routes.EDIT_CONSTRUCTION.replace(":id", id)),
-    delete: (id) => showDeleteConfirm(id),
+    info: (id: string) =>
+      history.push(routes.DETAIL_CONSTRUCTION.replace(":id", id)),
+    edit: (id: string) =>
+      history.push(routes.EDIT_CONSTRUCTION.replace(":id", id)),
+    delete: (id: string) => showDeleteConfirm(id),
   };
 
   return (
     <Page>
       <Container>
-        {isLoading ? (<div className="spinner"><Spin size="large" /></div>) : (
+        {isLoading ? (
+          <div className="spinner">
+            <Spin size="large" />
+          </div>
+        ) : (
           <div className={styles.dashboard}>
             <div className={styles.title}>
               <h1>Obras</h1>
             </div>
-            <Button type="primary" icon={<PlusOutlined />} onClick={() => history.push(routes.NEW_CONSTRUCTION)}>Adicionar</Button>
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={() => history.push(routes.NEW_CONSTRUCTION)}
+            >
+              Adicionar
+            </Button>
             <div className={styles.cards}>
-              {constructions && constructions.length > 0 ? constructions.map((constr) => (
-                <div key={constr._id} className={styles.card}>
-                  <CardConstruction
-                    id={constr._id}
-                    title={constr.name}
-                    description={constr.location}
-                    actions={actions}
-                  />
-                </div>
-              )) : <h4>Nenhuma obra cadastrada</h4>}
+              {constructions && constructions.length > 0 ? (
+                constructions.map((constr: Construction) => (
+                  <div key={constr._id} className={styles.card}>
+                    <CardConstruction
+                      id={constr._id}
+                      title={constr.name}
+                      description={constr.location}
+                      actions={actions}
+                    />
+                  </div>
+                ))
+              ) : (
+                <h4>Nenhuma obra cadastrada</h4>
+              )}
             </div>
           </div>
         )}

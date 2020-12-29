@@ -1,29 +1,29 @@
 .dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .title {
+    text-align: center;
+  }
+
+  button {
+    margin: var(--spacing-base) 0;
+  }
+
+  .cards {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 800px;
+    margin-top: var(--spacing-large);
 
-    .title {
-        text-align: center;
+    h4 {
+      color: rgb(83, 83, 83);
     }
 
-    button {
-        margin: var(--spacing-base) 0;
+    .card {
+      margin: 20px;
     }
-
-    .cards {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        max-width: 800px;
-        margin-top: var(--spacing-large);
-        
-        h4 {
-            color: rgb(83, 83, 83);
-        }
-
-        .card {
-            margin: 20px;
-        }
-    }    
+  }
 }
