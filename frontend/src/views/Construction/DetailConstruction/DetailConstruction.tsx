@@ -4,6 +4,7 @@ import { RouteComponentProps } from "react-router-dom";
 
 import { detail } from "services/construction.service";
 import { remove } from "services/system.service";
+import { SystemCard } from "interfaces/system.interface";
 import routes from "routes/routes";
 
 import Page from "components/Page/Page";
@@ -23,14 +24,6 @@ const { confirm } = Modal;
 
 interface RouteParams {
   id: string;
-}
-
-interface System {
-  _id: string;
-  name: string;
-  nickname: string;
-  description: string;
-  construction: string;
 }
 
 const DetailConstruction: React.FC<RouteComponentProps<RouteParams>> = ({
@@ -158,7 +151,7 @@ const DetailConstruction: React.FC<RouteComponentProps<RouteParams>> = ({
               </div>
               <div className={styles.systems}>
                 {systems && systems.length > 0 ? (
-                  systems.map((sys: System) => (
+                  systems.map((sys: SystemCard) => (
                     <div className={styles.card} key={sys._id}>
                       <CardSystem
                         name={sys.name}

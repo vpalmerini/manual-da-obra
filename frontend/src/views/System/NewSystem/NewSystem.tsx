@@ -3,6 +3,7 @@ import { useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
 
 import { create } from "services/system.service";
+import { System } from "interfaces/system.interface";
 
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
@@ -17,11 +18,6 @@ interface RouteParams {
   id: string;
 }
 
-interface Data {
-  name: string;
-  description: string;
-}
-
 const NewSystem: React.FC<RouteComponentProps<RouteParams>> = ({
   history,
   match,
@@ -33,7 +29,7 @@ const NewSystem: React.FC<RouteComponentProps<RouteParams>> = ({
   const submitSystem = (
     e: React.FormEvent<HTMLElement>,
     id: string,
-    data: Data
+    data: System
   ) => {
     e.preventDefault();
     setIsSubmitting(true);

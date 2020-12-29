@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { RouteComponentProps } from "react-router-dom";
 
 import { detail, edit } from "services/system.service";
+import { System } from "interfaces/system.interface";
 
 import Page from "components/Page/Page";
 import Container from "components/Container/Container";
@@ -16,11 +17,6 @@ const { TextArea } = Input;
 interface RouteParams {
   id: string;
   nickname: string;
-}
-
-interface Data {
-  name: string;
-  description: string;
 }
 
 const EditSystem: React.FC<RouteComponentProps<RouteParams>> = ({
@@ -60,7 +56,7 @@ const EditSystem: React.FC<RouteComponentProps<RouteParams>> = ({
     e: React.FormEvent<HTMLElement>,
     id: string,
     nickname: string,
-    data: Data
+    data: System
   ) => {
     e.preventDefault();
     setIsSubmitting(true);
