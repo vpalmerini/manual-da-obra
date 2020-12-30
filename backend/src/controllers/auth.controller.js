@@ -23,6 +23,42 @@ if (isProduction) {
   REFRESH_TOKEN_SECRET = fs.readFileSync(REFRESH_TOKEN_SECRET, "utf-8").trim();
 }
 
+/**
+ * @swagger
+ *  components:
+ *    securitySchemas:
+ *      cookieAuth:
+ *        type: apiKey
+ *        in: cookie
+ *        name: token
+ */ 
+
+/**
+ * @swagger
+ * /auth:
+ *  post:
+ *    summary: Authentication
+ *    requestBody:
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            required:
+ *              - username
+ *              - password
+ *            properties:
+ *              username:
+ *                type: string
+ *              password:
+ *                type: string
+ *    responses:
+ *      '200':
+ *        description: OK
+ *      '401':
+ *        description: Invalid Credentials
+ *    tags:
+ *      - auth
+ */
 router.post("/", async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -71,6 +107,21 @@ router.post("/", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /auth/refresh:
+ *  post:
+ *    security:
+ *      - cookieAuth: []
+ *    summary: Refresh Token
+ *    responses:
+ *      '200':
+ *        description: Returns a new token as cookie
+ *      '401':
+ *        description: Expired or invalid token
+ *    tags:
+ *      - auth
+ */
 router.post("/refresh", VerifyRefreshToken, async (req, res) => {
   try {
     const { refreshToken } = req.authContext;
@@ -94,6 +145,21 @@ router.post("/refresh", VerifyRefreshToken, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /auth/me:
+ *  get:
+ *    security:
+ *      - cookieAuth: []
+ *    summary: Verifies if the given token is still valid and returns user's data
+ *    responses:
+ *      '200':
+ *        description: Returns a user's details (the one signed in JWT)
+ *      '401':
+ *        description: Expired or invalid token
+ *    tags:
+ *      - auth
+ */
 router.get("/me", AuthMiddleware, async (req, res) => {
   try {
     const { id } = req.authContext.data;
@@ -116,6 +182,21 @@ router.get("/me", AuthMiddleware, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /auth/logout:
+ *  post:
+ *    security:
+ *      - cookieAuth: []
+ *    summary: Removes cookies from browser
+ *    responses:
+ *      '202':
+ *        description: Accepted
+ *      '401':
+ *        description: Expired or invalid token
+ *    tags:
+ *      - auth
+ */
 router.post("/logout", async (req, res) => {
   try {
     await clearCookies(res);
