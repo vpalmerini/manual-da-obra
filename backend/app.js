@@ -5,7 +5,7 @@ const path = require("path");
 const rfs = require("rotating-file-stream");
 
 const connectDB = require("./src/db");
-const { handleError } = require("./src/helpers/error");
+const setup = require("./src/swagger");
 
 const app = express();
 
@@ -37,9 +37,7 @@ app.get(`${basePath}/ping`, (req, res) => {
   res.send("pong");
 });
 
-app.use((err, req, res) => {
-  handleError(err, res);
-});
+setup(app);
 
 if (!isProduction) {
   console.log(`API is running in http://localhost:${port}/api`);
