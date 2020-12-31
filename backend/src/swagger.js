@@ -10,7 +10,7 @@ const definition = {
   },
   servers: [
     {
-      url: "http://localhost:8000/api"
+      url: process.env.API_URL
     }
   ]
 };
