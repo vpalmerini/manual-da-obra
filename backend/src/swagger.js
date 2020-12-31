@@ -6,7 +6,7 @@ const definition = {
   info: {
     title: "API do Manual da Obra",
     version: "1.0.0",
-    description: "Documentação da API"
+    description: "Documentação da API (apenas para auxiliar no desenvolvimento e manutenção)"
   },
   servers: [
     {
