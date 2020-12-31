@@ -2,6 +2,36 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
+/**
+ * @swagger
+ *  components:
+ *    schemas:
+ *      System:
+ *        type: object
+ *        required:
+ *          - name
+ *        properties:
+ *          _id:
+ *            type: string
+ *            description: The auto-generated id of the system
+ *          nickname:
+ *            type: string
+ *            description: Just a formatting of system's name
+ *          description:
+ *            type: string
+ *          createdAt:
+ *            type: date
+ *            format: date-time
+ *          construction:
+ *            type: object
+ *            $ref: '#/components/schemas/Construction'
+ *          files:
+ *            type: array
+ *            items:
+ *              $ref: '#/components/schemas/File'
+ *            description: List of system's files
+ */ 
+
 const SystemSchema = new Schema({
   name: {
     type: String,

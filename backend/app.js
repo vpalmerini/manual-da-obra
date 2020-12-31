@@ -5,7 +5,7 @@ const path = require("path");
 const rfs = require("rotating-file-stream");
 
 const connectDB = require("./src/db");
-const { handleError } = require("./src/helpers/error");
+const setup = require("./src/swagger");
 
 const app = express();
 
@@ -14,6 +14,7 @@ const port = PORT;
 const basePath = "/api";
 let isProduction = NODE_ENV === "production";
 
+// logs
 if (isProduction) {
   const accessLogStream = rfs.createStream('access.log', {
     interval: '7d',
@@ -24,9 +25,7 @@ if (isProduction) {
   app.use(morgan('dev'));
 }
 
-
 app.use(cors({ credentials: true, origin: UI_URL }));
-
 app.use(express.json());
 
 connectDB();
@@ -37,11 +36,8 @@ app.get(`${basePath}/ping`, (req, res) => {
   res.send("pong");
 });
 
-app.use((err, req, res) => {
-  handleError(err, res);
-});
-
 if (!isProduction) {
+  setup(app); // swagger UI
   console.log(`API is running in http://localhost:${port}/api`);
 }
 

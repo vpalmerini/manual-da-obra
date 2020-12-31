@@ -1,7 +1,33 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
-const UserSchema = new mongoose.Schema({
+const { Schema } = mongoose;
+
+/**
+ * @swagger
+ *  components:
+ *    schemas:
+ *      User:
+ *        type: object
+ *        required:
+ *          - username
+ *        properties:
+ *          _id:
+ *            type: string
+ *            description: The auto-generated id of the user
+ *          username:
+ *            type: string
+ *          email:
+ *            type: string
+ *          password:
+ *            type: string
+ *            description: It's stored as a hash
+ *          createdAt:
+ *            type: date
+ *            format: date-time
+ */ 
+
+const UserSchema = new Schema({
   username: {
     type: String,
     unique: true,

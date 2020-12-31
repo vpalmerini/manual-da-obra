@@ -127,8 +127,12 @@ The API uses [morgan](https://github.com/expressjs/morgan) as logger middleware.
 
 Also in `production`, the swarm has an instance of each [Grafana](https://grafana.com/) and [Loki](https://grafana.com/oss/loki/) running to get the logs, which makes it easy to visualize them.
 
+## Docs
+
+The API's documentation is made with [Swagger](https://swagger.io/) and can be accessed in `dev` environment at `http://localhost:8000/api/docs`.
+
+There is also a [Postman](https://www.postman.com/) [collection](https://www.getpostman.com/collections/11f66e57095a1714f2b5) which serve as a documentation as well.
+
 ## Improvements to be made
 
 - Pipeline of unit and integration tests
-- API documentation
-- Frontend refactor with TypeScript
