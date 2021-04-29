@@ -1,11 +1,11 @@
-const express = require("express");
+import { Router } from 'express';
 
-const router = express.Router();
+const router = Router();
 
-router.use("/auth", require("./auth.controller"));
-router.use("/users", require("./user.controller"));
-router.use("/constructions", require("./construction.controller"));
-router.use("/constructions", require("./system.controller"));
-router.use("/constructions", require("./file.controller"));
+router.use('/auth', import('./auth.controller'));
+router.use('/users', import('./user.controller'));
+router.use('/constructions', import('./construction.controller'));
+router.use('/constructions/:id', import('./system.controller'));
+router.use('/constructions/:id/systems/:nickname/files', import('./file.controller'));
 
-module.exports = router;
+export default router;

@@ -1,26 +1,26 @@
-const express = require("express");
+import { Router } from 'express';
+import { sign, verify } from 'jsonwebtoken';
+import { compare } from 'bcryptjs';
+import { readFileSync } from 'fs';
 
-const router = express.Router();
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const fs = require("fs");
+import { getUserWithPassword } from '../services/auth.service';
+import { getUser } from '../services/user.service';
 
-const { getUserWithPassword } = require("../services/auth.service");
-const UserService = require("../services/user.service");
+import { handleError, ErrorHandler } from '../helpers/error';
+import { clearCookies } from '../helpers/cookie';
 
-const { handleError, ErrorHandler } = require("../helpers/error");
-const { clearCookies } = require("../helpers/cookie");
+import { TOKEN_EXP, REFRESH_TOKEN_EXP } from '../jwt';
+import { AuthMiddleware, VerifyRefreshToken } from '../middlewares/auth.middleware';
 
-const jwtConfig = require("../jwt");
-const { AuthMiddleware, VerifyRefreshToken } = require("../middlewares/auth.middleware");
+const router = Router();
 
 let { TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
 const { NODE_ENV } = process.env;
-const isProduction = NODE_ENV === "production";
+const isProduction = NODE_ENV === 'production';
 
 if (isProduction) {
-  TOKEN_SECRET = fs.readFileSync(TOKEN_SECRET, "utf-8").trim();
-  REFRESH_TOKEN_SECRET = fs.readFileSync(REFRESH_TOKEN_SECRET, "utf-8").trim();
+  TOKEN_SECRET = readFileSync(TOKEN_SECRET, 'utf-8').trim();
+  REFRESH_TOKEN_SECRET = readFileSync(REFRESH_TOKEN_SECRET, 'utf-8').trim();
 }
 
 /**
@@ -31,7 +31,7 @@ if (isProduction) {
  *        type: apiKey
  *        in: cookie
  *        name: token
- */ 
+ */
 
 /**
  * @swagger
@@ -59,41 +59,33 @@ if (isProduction) {
  *    tags:
  *      - auth
  */
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const { username, password } = req.body;
     const user = await getUserWithPassword({ username });
-    if (!user) {
-      throw new ErrorHandler(401, "Invalid credentials");
-    }
+    if (!user) throw new ErrorHandler(401, 'Invalid credentials');
 
-    const compare = await bcrypt.compare(password, user.password);
-    if (!compare) {
-      throw new ErrorHandler(401, "Invalid credentials");
-    }
+    const _compare = await compare(password, user.password);
+    if (!_compare) throw new ErrorHandler(401, 'Invalid credentials');
 
-    const token = jwt.sign(
-      { id: user._id, email: user.email, name: user.name },
-      TOKEN_SECRET,
-      {
-        expiresIn: jwtConfig.TOKEN_EXP,
-      }
-    );
-    const refreshToken = jwt.sign(
+    const token = sign({ id: user._id, email: user.email, name: user.name }, TOKEN_SECRET, {
+      expiresIn: TOKEN_EXP,
+    });
+    const refreshToken = sign(
       { id: user._id, email: user.email, name: user.name },
       REFRESH_TOKEN_SECRET,
       {
-        expiresIn: jwtConfig.REFRESH_TOKEN_EXP,
+        expiresIn: REFRESH_TOKEN_EXP,
       }
     );
     user.password = null;
 
     return res
-      .cookie("token", token, {
+      .cookie('token', token, {
         httpOnly: true,
         secure: isProduction,
       })
-      .cookie("refresh_token", refreshToken, {
+      .cookie('refresh_token', refreshToken, {
         httpOnly: true,
         secure: isProduction,
       })
@@ -122,17 +114,17 @@ router.post("/", async (req, res) => {
  *    tags:
  *      - auth
  */
-router.post("/refresh", VerifyRefreshToken, async (req, res) => {
+router.post('/refresh', VerifyRefreshToken, async (req, res) => {
   try {
     const { refreshToken } = req.authContext;
 
-    const { id, email, name } = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET);
-    const token = jwt.sign({ id, email, name }, TOKEN_SECRET, {
-      expiresIn: jwtConfig.TOKEN_EXP,
+    const { id, email, name } = verify(refreshToken, REFRESH_TOKEN_SECRET);
+    const token = sign({ id, email, name }, TOKEN_SECRET, {
+      expiresIn: TOKEN_EXP,
     });
 
     return res
-      .cookie("token", token, {
+      .cookie('token', token, {
         httpOnly: true,
         secure: isProduction,
       })
@@ -160,13 +152,11 @@ router.post("/refresh", VerifyRefreshToken, async (req, res) => {
  *    tags:
  *      - auth
  */
-router.get("/me", AuthMiddleware, async (req, res) => {
+router.get('/me', AuthMiddleware, async (req, res) => {
   try {
     const { id } = req.authContext.data;
-    const user = await UserService.getUser(id);
-    if (!user) {
-      throw new ErrorHandler(404, "User not found");
-    }
+    const user = await getUser(id);
+    if (!user) throw new ErrorHandler(404, 'User not found');
 
     const { _id, username, email } = user;
     return res.status(200).json({
@@ -197,7 +187,7 @@ router.get("/me", AuthMiddleware, async (req, res) => {
  *    tags:
  *      - auth
  */
-router.post("/logout", async (req, res) => {
+router.post('/logout', async (_req, res) => {
   try {
     await clearCookies(res);
     res.status(202).json({ status: 202 });
@@ -206,4 +196,4 @@ router.post("/logout", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

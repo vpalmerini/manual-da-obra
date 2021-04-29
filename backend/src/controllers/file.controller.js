@@ -1,14 +1,14 @@
-const express = require("express");
-const { check, validationResult } = require("express-validator");
-const multer = require("multer");
-const s3 = require("../s3");
-const { config, deleteParams } = require("../services/upload.service");
+import { Router } from 'express';
+import { check, validationResult } from 'express-validator';
+import multer from 'multer';
+import s3 from '../s3';
+import { config, deleteParams } from '../services/upload.service';
+import { createFile, getFile, updateFile, deleteFile } from '../services/file.service';
+import { getSystem, addFile } from '../services/system.service';
+import { handleError, ErrorHandler } from '../helpers/error';
+import { AuthMiddleware } from '../middlewares/auth.middleware';
 
-const router = express.Router();
-const FileService = require("../services/file.service");
-const SystemService = require("../services/system.service");
-const { handleError, ErrorHandler } = require("../helpers/error");
-const { AuthMiddleware } = require("../middlewares/auth.middleware");
+const router = Router();
 
 /**
  * @swagger
@@ -44,10 +44,10 @@ const { AuthMiddleware } = require("../middlewares/auth.middleware");
  *      - files
  */
 router.post(
-  "/:id/systems/:nickname/files",
+  '/',
   AuthMiddleware,
-  multer(config).single("file"),
-  [check("name").not().isEmpty().withMessage("Name is missing")],
+  multer(config).single('file'),
+  [check('name').not().isEmpty().withMessage('Name is missing')],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -61,21 +61,21 @@ router.post(
       let type;
 
       switch (contentType) {
-        case "application/pdf":
-          type = "project";
+        case 'application/pdf':
+          type = 'project';
           break;
-        case "video/mp4":
-          type = "video";
+        case 'video/mp4':
+          type = 'video';
           break;
         default:
       }
 
-      let system = await SystemService.getSystem(id, nickname);
+      let system = await getSystem(id, nickname);
       if (!system) {
-        throw new ErrorHandler(400, "Invalid System");
+        throw new ErrorHandler(400, 'Invalid System');
       }
 
-      const file = await FileService.createFile({
+      const file = await createFile({
         name,
         type,
         url: location,
@@ -83,10 +83,7 @@ router.post(
         system: system._id,
       });
 
-      system = await SystemService.addFile(
-        system._id,
-        file._id,
-      );
+      system = await addFile(system._id, file._id);
 
       return res.status(201).json({
         status: 201,
@@ -132,15 +129,12 @@ router.post(
  *    tags:
  *      - files
  */
-router.get("/:id/systems/:nickname/files/:file_id", async (req, res) => {
+router.get('/:file_id', async (req, res) => {
   try {
     const { file_id } = req.params;
-    const file = await FileService.getFile(file_id);
-    if (!file) {
-      return res.status(404).json({
-        status: 404,
-      });
-    }
+    const file = await getFile(file_id);
+    if (!file) throw new ErrorHandler(404, 'File not found');
+
     return res.status(200).json({
       status: 200,
       file,
@@ -192,9 +186,9 @@ router.get("/:id/systems/:nickname/files/:file_id", async (req, res) => {
  *      - files
  */
 router.put(
-  "/:id/systems/:nickname/files/:file_id",
+  '/:file_id',
   AuthMiddleware,
-  [check("type").isEmpty().withMessage("Type cannot be changed")],
+  [check('type').isEmpty().withMessage('Type cannot be changed')],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -202,12 +196,9 @@ router.put(
     }
     try {
       const { file_id } = req.params;
-      const file = await FileService.updateFile(file_id, req.body);
-      if (!file) {
-        return res.status(404).json({
-          status: 404,
-        });
-      }
+      const file = await updateFile(file_id, req.body);
+      if (!file) throw new ErrorHandler(404, 'File not found');
+
       return res.status(200).json({
         status: 200,
         file,
@@ -252,28 +243,27 @@ router.put(
  *    tags:
  *      - files
  */
-router.delete("/:id/systems/:nickname/files/:id_file", AuthMiddleware, async (req, res) => {
+router.delete('/:id_file', AuthMiddleware, async (req, res) => {
   try {
     const { id_file } = req.params;
-    const file = await FileService.deleteFile({ _id: id_file });
-    if (!file) {
-      return res.status(404).json({
-        status: 404,
-      });
-    }
+    const file = await deleteFile({ _id: id_file });
+    if (!file) throw new ErrorHandler(404, 'File not found');
+
     const params = deleteParams(file.key);
-    await s3.deleteObject(params).promise()
-      .then(() => {
-        return res.status(202).json({
+    await s3
+      .deleteObject(params)
+      .promise()
+      .then(() =>
+        res.status(202).json({
           status: 202,
-        });
-      })
+        })
+      )
       .catch(() => {
-        throw new ErrorHandler(500, "Error while deleting object")
+        throw new ErrorHandler(500, 'Error while deleting object');
       });
   } catch (e) {
     handleError(e, res);
   }
 });
 
-module.exports = router;
+export default router;
