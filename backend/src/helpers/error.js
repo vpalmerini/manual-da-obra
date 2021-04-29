@@ -1,4 +1,4 @@
-const { clearCookies } = require("./cookie");
+import { clearCookies } from './cookie';
 
 class ErrorHandler extends Error {
   constructor(status, message) {
@@ -19,7 +19,4 @@ const handleError = async (err, res) => {
   });
 };
 
-module.exports = {
-  ErrorHandler,
-  handleError,
-};
+export { ErrorHandler, handleError };
