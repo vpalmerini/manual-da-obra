@@ -1,7 +1,5 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
-
-const { Schema } = mongoose;
+import { model, Schema } from 'mongoose';
+import { hash } from 'bcryptjs';
 
 /**
  * @swagger
@@ -25,7 +23,7 @@ const { Schema } = mongoose;
  *          createdAt:
  *            type: date
  *            format: date-time
- */ 
+ */
 
 const UserSchema = new Schema({
   username: {
@@ -47,14 +45,14 @@ const UserSchema = new Schema({
   },
 });
 
-UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
+UserSchema.pre('save', async (next) => {
+  if (!this.isModified('password')) {
     return next();
   }
-  this.password = await bcrypt.hash(this.password, 10);
+  this.password = await hash(this.password, 10);
   return next();
 });
 
-const User = mongoose.model("User", UserSchema);
+const User = model('User', UserSchema);
 
-module.exports = User;
+export default User;

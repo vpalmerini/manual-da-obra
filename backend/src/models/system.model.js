@@ -1,6 +1,4 @@
-const mongoose = require("mongoose");
-
-const { Schema } = mongoose;
+import { model, Schema } from 'mongoose';
 
 /**
  * @swagger
@@ -30,7 +28,7 @@ const { Schema } = mongoose;
  *            items:
  *              $ref: '#/components/schemas/File'
  *            description: List of system's files
- */ 
+ */
 
 const SystemSchema = new Schema({
   name: {
@@ -45,11 +43,11 @@ const SystemSchema = new Schema({
   },
   files: [{
     type: Schema.Types.ObjectId,
-    ref: "File",
+    ref: 'File',
   }],
   construction: {
     type: Schema.Types.ObjectId,
-    ref: "Construction",
+    ref: 'Construction',
   },
   createdAt: {
     type: Date,
@@ -57,15 +55,17 @@ const SystemSchema = new Schema({
   },
 });
 
-SystemSchema.pre("save", async function (next) {
-  this.nickname = await this.name.toLowerCase().replace(/ /g, "_");
+SystemSchema.pre('save', async (next) => {
+  this.nickname = this.name.toLowerCase().replace(/ /g, '_');
   return next();
 });
 
-SystemSchema.post("findOneAndUpdate", async function () {
+SystemSchema.post('findOneAndUpdate', async () => {
   const system = await this.model.findOne(this.getFilter());
-  system.nickname = system.name.toLowerCase().replace(/ /g, "_");
+  system.nickname = system.name.toLowerCase().replace(/ /g, '_');
   system.save();
 });
 
-module.exports = mongoose.model("System", SystemSchema);
+const System = model('System', SystemSchema);
+
+export default System;
