@@ -1,58 +1,16 @@
-const File = require("../models/file.model");
-const { ErrorHandler } = require("../helpers/error");
+import File from '../models/file.model';
 
-const getFiles = async (query) => {
-  try {
-    return await File.find(query);
-  } catch (e) {
-    throw new ErrorHandler(500, e._message);
-  }
-}
+const getFiles = async (query) => File.find(query);
 
-const createFile = async (data) => {
-  try {
-    return await File.create(data);
-  } catch (e) {
-    if (e.code === 11000) {
-      throw new ErrorHandler(409, e.errmsg);
-    }
-    throw new ErrorHandler(500, e._message);
-  }
-};
+const createFile = async (data) => File.create(data);
 
-const getFile = async (id) => {
-  try {
-    return await File.findById(id);
-  } catch (e) {
-    throw new ErrorHandler(500, e._message);
-  }
-};
+const getFile = async (id) => File.findById(id);
 
-const deleteFile = async (params) => {
-  try {
-    return await File.findOneAndDelete(params);
-  } catch (e) {
-    throw new ErrorHandler(500, e._message);
-  }
-};
+const deleteFile = async (params) => File.findOneAndDelete(params);
 
 const updateFile = async (id, data) => {
-  try {
-    await File.findOneAndUpdate(
-      { _id: id },
-      { $set: data },
-      { useFindAndModify: false }
-    );
-    return await File.findOne({ _id: id });
-  } catch (e) {
-    throw new ErrorHandler(500, e._message);
-  }
+  await File.findOneAndUpdate({ _id: id }, { $set: data }, { useFindAndModify: false });
+  return File.findOne({ _id: id });
 };
 
-module.exports = {
-  getFiles,
-  createFile,
-  getFile,
-  deleteFile,
-  updateFile,
-};
+export { getFiles, createFile, getFile, deleteFile, updateFile };

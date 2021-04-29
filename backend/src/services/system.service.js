@@ -1,66 +1,28 @@
-const System = require("../models/system.model");
-const { ErrorHandler } = require("../helpers/error");
+import System from '../models/system.model';
 
-const getSystems = async (query) => {
-  try {
-    return await System.find(query);
-  } catch (e) {
-    throw new ErrorHandler(500, e._message);
-  }
-};
+const getSystems = async (query) => System.find(query);
 
-const createSystem = async (data) => {
-  try {
-    return await System.create(data);
-  } catch (e) {
-    if (e.code === 11000) {
-      throw new ErrorHandler(409, e.errmsg);
-    }
-    throw new ErrorHandler(500, e._message);
-  }
-};
+const createSystem = async (data) => System.create(data);
 
-const getSystem = async (id, nickname) => {
-  try {
-    return await System.findOne({ construction: id, nickname }).populate("files").populate("construction", ["name", "image"]);
-  } catch (e) {
-    throw new ErrorHandler(500, e._message);
-  }
-};
+const getSystem = async (id, nickname) =>
+  System.findOne({ construction: id, nickname })
+    .populate('files')
+    .populate('construction', ['name', 'image']);
 
-const deleteSystem = async (params) => {
-  try {
-    return await System.findOneAndDelete(params);
-  } catch (e) {
-    throw new ErrorHandler(500, e._message);
-  }
-};
+const deleteSystem = async (params) => System.findOneAndDelete(params);
 
-const updateSystem = async (id, nickname, data) => {
-  try {
-    return await System.findOneAndUpdate(
-      { construction: id, nickname },
-      { $set: data },
-      { useFindAndModify: false }
-    );
-  } catch (e) {
-    throw new ErrorHandler(500, e._message);
-  }
-};
+const updateSystem = async (id, nickname, data) =>
+  System.findOneAndUpdate(
+    { construction: id, nickname },
+    { $set: data },
+    { useFindAndModify: false }
+  );
 
-const addFile = async (id, fileId) => {
-  try {
-    return await System.findOneAndUpdate({ _id: id }, {$push: {files: fileId}}, { new: true, useFindAndModify: false });
-  } catch (e) {
-    throw new ErrorHandler(500, e._message);
-  }
-}
+const addFile = async (id, fileId) =>
+  System.findOneAndUpdate(
+    { _id: id },
+    { $push: { files: fileId } },
+    { new: true, useFindAndModify: false }
+  );
 
-module.exports = {
-  getSystems,
-  createSystem,
-  getSystem,
-  deleteSystem,
-  updateSystem,
-  addFile,
-};
+export { getSystems, createSystem, getSystem, deleteSystem, updateSystem, addFile };
