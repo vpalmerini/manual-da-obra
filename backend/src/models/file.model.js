@@ -1,6 +1,4 @@
-const mongoose = require("mongoose");
-
-const { Schema } = mongoose;
+import { model, Schema } from 'mongoose';
 
 /**
  * @swagger
@@ -31,7 +29,7 @@ const { Schema } = mongoose;
  *          system:
  *            type: object
  *            $ref: '#/components/schemas/System'
- */ 
+ */
 
 const FileSchema = new Schema({
   name: {
@@ -40,17 +38,17 @@ const FileSchema = new Schema({
   },
   type: {
     type: String,
-    enum: ["video", "project"],
+    enum: ['video', 'project'],
   },
   url: {
-    type: String
+    type: String,
   },
   key: {
     type: String,
   },
   system: {
     type: Schema.Types.ObjectId,
-    ref: "System",
+    ref: 'System',
   },
   createdAt: {
     type: Date,
@@ -58,4 +56,6 @@ const FileSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("File", FileSchema);
+const File = model('File', FileSchema);
+
+export default File;

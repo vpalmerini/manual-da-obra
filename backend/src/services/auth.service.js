@@ -1,12 +1,5 @@
-const User = require("../models/user.model");
-const { ErrorHandler } = require("../helpers/error");
+import User from '../models/user.model';
 
-const getUserWithPassword = async (params) => {
-  try {
-    return await User.findOne(params).select("+password");
-  } catch (e) {
-    throw new ErrorHandler(500, e.errmsg);
-  }
-};
+const getUserWithPassword = async (params) => User.findOne(params).select('+password');
 
-module.exports = { getUserWithPassword };
+export { getUserWithPassword };

@@ -1,24 +1,24 @@
-const express = require("express");
-const cors = require("cors");
-const morgan = require("morgan");
-const path = require("path");
-const rfs = require("rotating-file-stream");
+import express, { json } from 'express';
+import cors from 'cors';
+import morgan from 'morgan';
+import { join } from 'path';
+import { createStream } from 'rotating-file-stream';
 
-const connectDB = require("./src/db");
-const setup = require("./src/swagger");
+import connectDB from './src/db';
+import setup from './src/swagger';
 
 const app = express();
 
 const { UI_URL, PORT, NODE_ENV } = process.env;
 const port = PORT;
-const basePath = "/api";
-let isProduction = NODE_ENV === "production";
+const basePath = '/api';
+const isProduction = NODE_ENV === 'production';
 
 // logs
 if (isProduction) {
-  const accessLogStream = rfs.createStream('access.log', {
+  const accessLogStream = createStream('access.log', {
     interval: '7d',
-    path: path.join(__dirname, 'log')
+    path: join(__dirname, 'log'),
   });
   app.use(morgan('combined', { stream: accessLogStream }));
 } else {
@@ -26,14 +26,14 @@ if (isProduction) {
 }
 
 app.use(cors({ credentials: true, origin: UI_URL }));
-app.use(express.json());
+app.use(json());
 
 connectDB();
 
-app.use(basePath, require("./src/controllers"));
+app.use(basePath, import('./src/controllers'));
 
-app.get(`${basePath}/ping`, (req, res) => {
-  res.send("pong");
+app.get(`${basePath}/ping`, (_req, res) => {
+  res.send('pong');
 });
 
 if (!isProduction) {

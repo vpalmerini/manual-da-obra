@@ -1,5 +1,4 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import { model, Schema } from 'mongoose';
 
 /**
  * @swagger
@@ -29,7 +28,7 @@ const Schema = mongoose.Schema;
  *            items:
  *              $ref: '#/components/schemas/System'
  *            description: List of construction's systems
- */ 
+ */
 
 const ConstructionSchema = new Schema({
   name: {
@@ -42,7 +41,7 @@ const ConstructionSchema = new Schema({
   },
   systems: [{
     type: Schema.Types.ObjectId,
-    ref: "System"
+    ref: 'System',
   }],
   image: {
     type: String,
@@ -53,4 +52,6 @@ const ConstructionSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("Construction", ConstructionSchema);
+const Construction = model('Construction', ConstructionSchema);
+
+export default Construction;

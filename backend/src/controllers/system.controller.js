@@ -1,11 +1,11 @@
-const express = require("express");
-const { check, validationResult } = require("express-validator");
+import { Router } from 'express';
+import { check, validationResult } from 'express-validator';
+import { createSystem, getSystem, deleteSystem, updateSystem } from '../services/system.service';
+import { addSystem } from '../services/construction.service';
+import { handleError, ErrorHandler } from '../helpers/error';
+import { AuthMiddleware } from '../middlewares/auth.middleware';
 
-const router = express.Router();
-const SystemService = require("../services/system.service");
-const ConstructionService = require("../services/construction.service");
-const { handleError } = require("../helpers/error");
-const { AuthMiddleware } = require("../middlewares/auth.middleware");
+const router = Router();
 
 /**
  * @swagger
@@ -35,8 +35,8 @@ const { AuthMiddleware } = require("../middlewares/auth.middleware");
  *      - systems
  */
 router.post(
-  "/:id/systems",
-  [check("name").not().isEmpty().withMessage("Name is missing")],
+  '/systems',
+  [check('name').not().isEmpty().withMessage('Name is missing')],
   AuthMiddleware,
   async (req, res) => {
     const errors = validationResult(req);
@@ -50,11 +50,8 @@ router.post(
         ...data,
         construction: req.params.id,
       };
-      const system = await SystemService.createSystem(data);
-      const construction = await ConstructionService.addSystem(
-        req.params.id,
-        system._id
-      );
+      const system = await createSystem(data);
+      const construction = await addSystem(req.params.id, system._id);
       return res.status(201).json({
         status: 201,
         construction,
@@ -93,15 +90,12 @@ router.post(
  *    tags:
  *      - systems
  */
-router.get("/:id/systems/:nickname", async (req, res) => {
+router.get('/systems/:nickname', async (req, res) => {
   try {
     const { id, nickname } = req.params;
-    const system = await SystemService.getSystem(id, nickname);
-    if (!system) {
-      return res.status(404).json({
-        status: 404,
-      });
-    }
+    const system = await getSystem(id, nickname);
+    if (!system) throw new ErrorHandler(404, 'System not found');
+
     return res.status(200).json({
       status: 200,
       system,
@@ -139,18 +133,15 @@ router.get("/:id/systems/:nickname", async (req, res) => {
  *    tags:
  *      - systems
  */
-router.delete("/:id/systems/:nickname", AuthMiddleware, async (req, res) => {
+router.delete('/systems/:nickname', AuthMiddleware, async (req, res) => {
   try {
     const { id, nickname } = req.params;
-    const system = await SystemService.deleteSystem({
+    const system = await deleteSystem({
       construction: id,
       nickname,
     });
-    if (!system) {
-      return res.status(404).json({
-        status: 404,
-      });
-    }
+    if (!system) throw new ErrorHandler(404, 'System not found');
+
     return res.status(202).json({
       status: 202,
     });
@@ -194,15 +185,12 @@ router.delete("/:id/systems/:nickname", AuthMiddleware, async (req, res) => {
  *    tags:
  *      - systems
  */
-router.put("/:id/systems/:nickname", AuthMiddleware, async (req, res) => {
+router.put('/systems/:nickname', AuthMiddleware, async (req, res) => {
   try {
     const { id, nickname } = req.params;
-    const system = await SystemService.updateSystem(id, nickname, req.body);
-    if (!system) {
-      return res.status(404).json({
-        status: 404,
-      });
-    }
+    const system = await updateSystem(id, nickname, req.body);
+    if (!system) throw new ErrorHandler(404, 'System not found');
+
     return res.status(200).json({
       status: 200,
       system,
@@ -212,4 +200,4 @@ router.put("/:id/systems/:nickname", AuthMiddleware, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

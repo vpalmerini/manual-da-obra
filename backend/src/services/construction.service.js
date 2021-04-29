@@ -1,55 +1,23 @@
-const Construction = require("../models/construction.model");
-const { ErrorHandler } = require("../helpers/error");
+import Construction from '../models/construction.model';
 
-const getConstructions = async (query) => {
-  try {
-    return await Construction.find(query);
-  } catch (e) {
-    throw new ErrorHandler(500, e._message);
-  }
-};
+const getConstructions = async (query) => Construction.find(query);
 
-const createConstruction = async (data) => {
-  try {
-    return await Construction.create(data);
-  } catch (e) {
-    throw new ErrorHandler(500, e._message);
-  }
-};
+const createConstruction = async (data) => Construction.create(data);
 
-const getConstruction = async (id) => {
-  try {
-    return await Construction.findById(id).populate("systems");
-  } catch (e) {
-    throw new ErrorHandler(500, e._message);
-  }
-};
+const getConstruction = async (id) => Construction.findById(id).populate('systems');
 
-const deleteConstruction = async (id) => {
-  try {
-    return await Construction.findByIdAndDelete(id);
-  } catch (e) {
-    throw new ErrorHandler(500, e._message);
-  }
-};
+const deleteConstruction = async (id) => Construction.findByIdAndDelete(id);
 
-const updateConstruction = async (id, data) => {
-  try {
-    return await Construction.updateOne({ _id: id }, { $set: data });
-  } catch (e) {
-    throw new ErrorHandler(500, e._message);
-  }
-};
+const updateConstruction = async (id, data) => Construction.updateOne({ _id: id }, { $set: data });
 
-const addSystem = async (id, systemId) => {
-  try {
-    return await Construction.findOneAndUpdate({ _id: id }, {$push: {systems: systemId}}, { new: true, useFindAndModify: false });
-  } catch (e) {
-    throw new ErrorHandler(500, e._message);
-  }
-}
+const addSystem = async (id, systemId) =>
+  Construction.findOneAndUpdate(
+    { _id: id },
+    { $push: { systems: systemId } },
+    { new: true, useFindAndModify: false }
+  );
 
-module.exports = {
+export {
   getConstructions,
   createConstruction,
   getConstruction,

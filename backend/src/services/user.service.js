@@ -1,54 +1,16 @@
-const User = require("../models/user.model");
-const { ErrorHandler } = require("../helpers/error");
+import User from '../models/user.model';
 
-const getUsers = async (query) => {
-  try {
-    return await User.find(query);
-  } catch (e) {
-    throw new ErrorHandler(500, "Error while fetching users");
-  }
-};
+const getUsers = async (query) => User.find(query);
 
-const createUser = async (data) => {
-  try {
-    return await User.create(data);
-  } catch (e) {
-    if (e.code === 11000) {
-      throw new ErrorHandler(409, e.errmsg);
-    }
-    throw new ErrorHandler(500, e.errmsg);
-  }
-};
+const createUser = async (data) => User.create(data);
 
-const getUser = async (id) => {
-  try {
-    return await User.findById(id);
-  } catch (e) {
-    throw new ErrorHandler(500, e.errmsg);
-  }
-};
+const getUser = async (id) => User.findById(id);
 
-const deleteUser = async (id) => {
-  try {
-    return await User.findByIdAndDelete(id);
-  } catch (e) {
-    throw new ErrorHandler(500, e.errmsg);
-  }
-};
+const deleteUser = async (id) => User.findByIdAndDelete(id);
 
 const updateUser = async (id, data) => {
-  try {
-    await User.updateOne({ _id: id }, { $set: data });
-    return await User.findById(id);
-  } catch (e) {
-    throw new ErrorHandler(500, e.errmsg);
-  }
+  await User.updateOne({ _id: id }, { $set: data });
+  return User.findById(id);
 };
 
-module.exports = {
-  getUsers,
-  createUser,
-  getUser,
-  deleteUser,
-  updateUser,
-};
+export { getUsers, createUser, getUser, deleteUser, updateUser };

@@ -1,10 +1,10 @@
-const express = require("express");
-const { check, validationResult } = require('express-validator');
+import { Router } from 'express';
+import { check, validationResult } from 'express-validator';
+import { getUsers, createUser, getUser, deleteUser, updateUser } from '../services/user.service';
+import { ErrorHandler, handleError } from '../helpers/error';
+import { AuthMiddleware } from '../middlewares/auth.middleware';
 
-const router = express.Router();
-const UserService = require("../services/user.service");
-const { handleError } = require("../helpers/error");
-const { AuthMiddleware } = require("../middlewares/auth.middleware");
+const router = Router();
 
 /**
  * @swagger
@@ -19,9 +19,9 @@ const { AuthMiddleware } = require("../middlewares/auth.middleware");
  *    tags:
  *      - users
  */
-router.get("/", AuthMiddleware, async (req, res) => {
+router.get('/', AuthMiddleware, async (req, res) => {
   try {
-    const users = await UserService.getUsers({});
+    const users = await getUsers({});
     return res.status(200).json({
       status: 200,
       users,
@@ -51,25 +51,28 @@ router.get("/", AuthMiddleware, async (req, res) => {
  *    tags:
  *      - users
  */
-router.post("/", [
-  check('username').not().isEmpty().withMessage('Username is missing'),
-], AuthMiddleware, async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json(errors.array());
-  }
+router.post(
+  '/',
+  [check('username').not().isEmpty().withMessage('Username is missing')],
+  AuthMiddleware,
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json(errors.array());
+    }
 
-  try {
-    const user = await UserService.createUser(req.body);
-    user.password = null;
-    return res.status(201).json({
-      status: 201,
-      user,
-    });
-  } catch (e) {
-    handleError(e, res);
+    try {
+      const user = await createUser(req.body);
+      user.password = null;
+      return res.status(201).json({
+        status: 201,
+        user,
+      });
+    } catch (e) {
+      handleError(e, res);
+    }
   }
-});
+);
 
 /**
  * @swagger
@@ -93,15 +96,12 @@ router.post("/", [
  *    tags:
  *      - users
  */
-router.get("/:id", AuthMiddleware, async (req, res) => {
+router.get('/:id', AuthMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await UserService.getUser(id);
-    if (!user) {
-      return res.status(404).json({
-        status: 404,
-      });
-    }
+    const user = await getUser(id);
+    if (!user) throw new ErrorHandler(404, 'User not found');
+
     return res.status(200).json({
       status: 200,
       user,
@@ -133,14 +133,11 @@ router.get("/:id", AuthMiddleware, async (req, res) => {
  *    tags:
  *      - users
  */
-router.delete("/:id", AuthMiddleware, async (req, res) => {
+router.delete('/:id', AuthMiddleware, async (req, res) => {
   try {
-    const user = await UserService.deleteUser(req.params.id);
-    if (!user) {
-      return res.status(404).json({
-        status: 404,
-      });
-    }
+    const user = await deleteUser(req.params.id);
+    if (!user) throw new ErrorHandler(404, 'User not found');
+
     return res.status(202).json({
       status: 202,
     });
@@ -178,15 +175,12 @@ router.delete("/:id", AuthMiddleware, async (req, res) => {
  *    tags:
  *      - users
  */
-router.put("/:id", AuthMiddleware, async (req, res) => {
+router.put('/:id', AuthMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await UserService.updateUser(id, req.body);
-    if (!user) {
-      return res.status(404).json({
-        status: 404,
-      });
-    }
+    const user = await updateUser(id, req.body);
+    if (!user) throw new ErrorHandler(404, 'User not found');
+
     return res.status(200).json({
       status: 200,
       user,
@@ -196,4 +190,4 @@ router.put("/:id", AuthMiddleware, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
