@@ -1,9 +1,17 @@
 {
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "eslint.validate": [
+    "javascript"
+  ],
+  "eslint.packageManager": "yarn",
+  "eslint.workingDirectories": [
+    {
+      "directory": "./backend"
     },
-    "eslint.validate": [
-        "javascript"
-    ],
-    "eslint.packageManager": "yarn"
+    {
+      "directory": "./frontend"
+    }
+  ]
 }
