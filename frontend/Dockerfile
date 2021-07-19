@@ -1,4 +1,4 @@
-FROM node:alpine3.11 as build-deps
+FROM node:14-alpine3.11 as build-deps
 
 RUN apk --no-cache --virtual build-dependencies add \
     python \
